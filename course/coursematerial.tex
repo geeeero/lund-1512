@@ -26,6 +26,8 @@
 \newcommand{\posrealszero}{\reals_{\ge 0}}
 \newcommand{\naturals}{\mathbb{N}}
 
+\newcommand{\dd}{\,\mathrm{d}}
+
 \newcommand{\mbf}[1]{\mathbf{#1}}
 \newcommand{\bs}[1]{\boldsymbol{#1}}
 \renewcommand{\vec}[1]{{\bs#1}}
@@ -45,6 +47,8 @@
 \newcommand{\be}{\operatorname{Beta}} 
 \newcommand{\bebin}{\operatorname{Beta-binomial}} 
 
+\newtheorem{myex}{Exercise}
+
 \input{nydefs.tex}
 
 \title{Generalized Bayesian Inference\\ with Sets of Conjugate Priors}
@@ -60,11 +64,11 @@ Bayesian inference allows to combine information from data
 and information extraneous to data (e.g., expert information)
 into a `complete picture'.
 Data $X$ is assumed to be generated from a certain parametric distribution family,
-e.g., a binomial distribution with parameters $p$ and $n$,
-where $n$ is known but $p$ is unknown.
+e.g., a Binomial distribution with parameters $p$ and $n$,
+where $n$ is known but $p \in [0,1]$ is unknown.
 In short, $X\mid p \sim \bin(n,p)$, which means
 \begin{align*}
-f(x\mid p) P(X = x \mid p) &= {n \choose x} x^p (n-x)^{(1-p)}\,.
+f(x\mid p) &= P(X = x \mid p) = {n \choose x} p^x (1-p)^{n-x},\quad x \in \{0, 1, \ldots, n\}\,.
 \end{align*}
 Information about unknown parameters (here, $p$) is then expressed
 by a so-called prior distribution, some distribution with some pdf, here $f(p)$.
@@ -74,7 +78,7 @@ here with pdf $f(p\mid x)$, expressing the state of knowledge after having seen 
 It encompasses information from the prior $f(p)$ and data
 and is obtained via Bayes' Rule,
 \begin{align}
-f(p \mid x) &= \frac{f(x\mid p) f(p)}{\int f(x\mid p) f(p) dp}
+f(p \mid x) &= \frac{f(x\mid p) f(p)}{\int f(x\mid p) f(p) \dd p}
              = \frac{f(x\mid p) f(p)}{f(x)} \propto f(x\mid p) f(p)\,,
 \label{eq:bayesrule}
 \end{align}
@@ -91,16 +95,59 @@ which simplifies the creation of a sampler to approximate a posterior.
 
 \section{Conjugate priors}
 
-However, Bayesian inferenece not necessarily entails simulation methods.
+However, Bayesian inference not necessarily entails complex calculations and simulation methods.
 With a clever choice of parametric family for the prior distribution,
-the posterior distribution belongs to the same parametric family,
+the posterior distribution belongs to the same parametric family as the prior,
 just with updated parameters.
-Such prior distributions are so-called conjugate priors.
+Such prior distributions are called \emph{conjugate} priors.
+Basically, with conjugate priors one trades flexibility for tractability:
+The parametric family restricts the form of the prior,
+but with the advantage of much easier computations.
 
-The conjugate prior for the binomial distribution 
+The conjugate prior for the Binomial distribution is the Beta distribution,
+which is usually parametrised with parameters $\alpha$ and $\beta$.
+\begin{align}
+f(p\mid\alpha,\beta) &= \frac{1}{B(\alpha,\beta)}\, p^{\alpha-1}\, (1-p)^{\beta-1}\,,
+\label{eq:betadens}
+\end{align}
+where $B(\cdot,\cdot)$ is the Beta function.%
+\footnote{The Beta function is defined as $B(a,b) = \int_0^1 t^{a-1} (1-t)^{b-1} \dd t$
+and gives the inverse normalisation constant for the Beta distribution.
+We will not need to work with Beta functions here.}
+In short, we write $p \sim \beta(\alpha,\beta)$.
 
-where the last expression in \eqref{eq:bayesrule} can be used
+From now on, we will denote prior parameter values by an upper index ${}\uz$,
+and updated, posterior parameter values by an upper index ${}\un$.
 
+With this notational convention,
+let $X\mid p \sim \bin(n,p)$ and $p \sim \beta(\az,\bz)$.
+Then it holds that $p \mid x \sim \be(\an,\bn)$,
+where $\an$ and $\bn$ are updated, posterior parameters, obtained as
+\begin{align}
+\an &= \az + x\,, & \bn &= \bz + n - x \,.
+\label{eq:betapostab}
+\end{align}
+***Interpretation***
 
+\begin{myex}
+Confirm \eqref{eq:betapostab}, i.e.,
+show that, when $X\mid p \sim \bin(n,p)$ and $p \sim \beta(\az,\bz)$,
+the density of the posterior distribution for $p$ is of the form \eqref{eq:betadens}
+but with updated parameters.
+(Hint: use the last expression in \eqref{eq:bayesrule}
+and consider in the posterior only the terms proportional to $p$.)
+\end{myex}
+
+You have seen in the talk that we considered a different parametrisation of the Beta distribution
+in terms of $\nz$ and $\yz$, obtained as
+\begin{align*}
+\nz &= \az + \bz\,, & \yz &= \frac{\az}{\az+\bz}\,,
+\end{align*}
+writing, $p \sim \beta(\nz,\yz)$ and $p\mid x \sim \beta(\nn,\yn)$.
+***Interpretation***
+
+\begin{myex}
+***Derive the equations for $\nn$ and $\yn$ (you have seen them in the talk) from 
+\end{myex}
 
 \end{document}
