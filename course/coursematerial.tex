@@ -82,15 +82,22 @@ where $f(x)$ is the so-called marginal distribution of the data $X$.
 
 In general, the posterior distribution is hard to obtain,
 especially due to the integral in the denominator.
-
 The posterior can be approximated with numerical methods,
 like the Laplace approximation or simulation methods like MCMC (Markov chain Monte Carlo).
-With a clever choice of a parametric family for the prior distribution,
-the posterior distribution can be determined in closed form.
-These are so-called conjugate priors.
+There is a large literature dealing with computations of posteriors,
+and software like BUGS or JAGS has been developed
+which simplifies the creation of a sampler to approximate a posterior.
 
 
 \section{Conjugate priors}
+
+However, Bayesian inferenece not necessarily entails simulation methods.
+With a clever choice of parametric family for the prior distribution,
+the posterior distribution belongs to the same parametric family,
+just with updated parameters.
+Such prior distributions are so-called conjugate priors.
+
+The conjugate prior for the binomial distribution 
 
 where the last expression in \eqref{eq:bayesrule} can be used
 
