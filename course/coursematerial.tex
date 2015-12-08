@@ -304,12 +304,12 @@ reflecting the weight one gives to the prior as compared to the sample size $n$.
 Confirm \eqref{eq:canonicalupdate},
 the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$,
 for one-parametric exponential family distributions.
-Do this by using the last expression in \eqref{eq:bayesrule}
-and consider only the terms related to $\psi$ for the posterior.
+(Hint: Use the last expression in \eqref{eq:bayesrule}
+and consider only the terms related to $\psi$ for the posterior.)
 \end{myex}
 
 
-\section{The Beta distribution as canonically constructed conjugate prior}
+\section{Some canonically constructed conjugate priors}
 
 This looks all suspiciously similar to the reparametrised Beta distribution above.
 Indeed, the $\be(\nz,\yz)$ is the canonically constructed prior to the Binomial distribution:
@@ -322,6 +322,45 @@ f(s\mid p)
 \end{align}
 We have thus $\psi = \log(\theta/(1-\theta))$, $\mbf{b}(\psi) = -\log(1-\theta)$, and $\tau(\vec{x}) = s$.
 The function $\log(\theta/(1-\theta))$ is known as the \emph{logit}, denoted by $\logit(\theta)$.
+Constructing the prior from these ingredients leads to
+\begin{align}
+f\big(\logit(\theta) \mid \nz, \yz\big) \dd\psi %\dd\log\big(\frac{\theta}{1-\theta}\big)
+ &\propto \exp\Big\{ \nz \Big[ \yz \log\Big(\frac{\theta}{1-\theta}\Big) + \log(1-\theta) \Big] \Big\} \dd\psi\,.
+ %\dd\log\big(\frac{\theta}{1-\theta}\big)\,.
+\end{align}
+To transform this density over $\psi$ to a density over $\theta$,
+we have to multiply it with
+\begin{align}
+\left|\frac{\dd\psi}{\dd\theta}\right|
+ &= \left|\frac{\dd}{\dd\theta} \log\Big(\frac{\theta}{1-\theta}\Big)\right|
+  = \left| \frac{1-\theta}{\theta}\left(\frac{(1-\theta)+\theta}{(1-\theta)^2}\right) \right|
+  = \frac{1}{\theta(1-\theta)}\,,
+\end{align}
+and so we get
+\begin{align}
+\lefteqn{f(\theta\mid \nz, \yz)\dd\theta} \qquad \\  
+ &= f(\psi\mid \nz, \yz) \left|\frac{\dd\psi}{\dd\theta}\right| \dd\theta\\
+ &\propto \exp\Big\{ \nz\yz\log(\theta) + \big(\nz - \nz\yz\log(1-\theta)\big)\Big\} \frac{1}{\theta(1-\theta)}\dd\theta\\
+ &= \theta^{\nz\yz - 1} (1-\theta)^{\nz(1-\yz) - 1} \dd\theta\,.
+\end{align}
+This is indeed the Beta distribution \eqref{eq:betadensny}.%with parameters $\nz\yz$ and $\nz(1-\yz)$.
+
+\begin{myex}
+Construct the canonical conjugate prior to a sample distribution of your choice.
+This works only for distributions forming a canonical exponential family!
+(As a counterexample, the Weibull distribution with unknown shape parameter does not form a canonical exponential family.)
+You can try, e.g., the Normal (Gaussian) distribution with fixed variance $\sigma^2_0$
+or, if you want to avoid a density transformation, the Normal distribution with fixed variance~$1$.
+\end{myex}
+
+
+\section{Prior-data Conflict}
+
+\eqref{eq:canonicalupdate}
+
+\section{Sets of conjugate priors}
+
+
 
 
 \end{document}
