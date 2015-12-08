@@ -48,6 +48,8 @@
 \newcommand{\be}{\operatorname{Beta}} 
 \newcommand{\bebin}{\operatorname{Beta-binomial}} 
 
+\newcommand{\logit}{\operatorname{logit}} % logit
+
 \newcommand{\code}[1]{\emph{\ttfamily #1}}
 
 \newtheorem{myex}{Exercise}
@@ -75,9 +77,10 @@ success and failure. The number of successes $s$ in a series of $n$ independent 
 has then a Binomial distribution with parameters $p$ and $n$,
 where $n$ is known but $p \in [0,1]$ is unknown.
 In short, $S\mid p \sim \bin(n,p)$, which means
-\begin{align*}
+\begin{align}
 f(s\mid p) &= P(S = s \mid p) = {n \choose s} p^s (1-p)^{n-s},\quad s \in \{0, 1, \ldots, n\}\,.
-\end{align*}
+\label{eq:binompmf}
+\end{align}
 Information about unknown parameters (here, $p$) is then expressed
 by a so-called prior distribution, some distribution with some pdf, here $f(p)$.
 
@@ -227,28 +230,98 @@ to consider a single observation $x$ in \eqref{eq:expofam-sampledens} only,
 as the conjugacy property does not depend on the sample size.
 However, we find our version with $n$-dimensional i.i.d.\ sample $\vec{x}$
 more appropriate.} %, as `data is plural' (kaplan?).}
-With the Binomial distribution, we did so indirectly:
-It results from $n$ independent trials, which, encoded as $1=$ success and $0=$ failure, form a vector $\vec{x}$.
-It turns out that the sample distribution depends on $\vec{x}$ only through $s=\sum_{i=1}^n x_i$:
-\begin{align*}
-f(\vec{x} \mid p) &= P(\vec{X} = \vec{x}) = \prod_{i=1}^n p^{x_i} (1-p)^{1-x_i} \\
- &= {n \choose s} p^s (1-p)^{n-s} = P(S = s \mid p) = f(s\mid p)
-\end{align*}
-Such a summary function of a sample $\vec{x}$ is called \emph{a sufficient statistic of $\vec{x}$}.
-
+With the Binomial distribution, we did so indirectly only:
+The $\bin(n,p)$ distribution for $S$ results from $n$ independent trials with sucess probability $p$ each.
+Encoding success as $x_i=1$ and failure as $x_i=0$ and collecting the $n$ results in a vector $\vec{x}$,
+we get $s =\sum_{i=1}^n x_i$.
+It turns out that the sample distribution depends on $\vec{x}$ only through $s$:
+\begin{align}
+f(\vec{x} \mid p) &= P(\vec{X} = \vec{x}) = \prod_{i=1}^n p^{x_i} (1-p)^{1-x_i} = p^s (1-p)^{n-s}\,,
+\end{align}
+so $s$ summarizes the sample $\vec{x}$ without changing the pmf.
+Such a summary function of a sample $\vec{x}$ is called \emph{a sufficient statistic of $\vec{x}$}.%
+\footnote{There are $\binom{n}{s}$ 0/1 vectors $\vec{x}$ with $s$ 1's, leading to the Binomial pmf \eqref{eq:binompmf}.
+For a Bayesian analysis, such factors that do not depend on the parameter of interest do not matter.
+This is one of the central distinctions between Bayesian and Frequentist methods.}
 
 A sample distribution is said to belong to the \emph{canonical exponential family}
 if its density or mass function satisfies the decomposition
 \begin{align}
-f(\vec{x} \mid \theta) &= a(\vec{x})\exp\big\{\langle \psi, \tau(\vec{x}) \rangle - n \mbf{b}(\psi)\big\}\,,
+f(\vec{x} \mid \theta) &= a(\vec{x})\exp\big\{\langle \psi, \tau(\vec{x}) \rangle - n \mbf{b}(\psi)\big\}\,.
 \label{eq:expofam-sampledens}
 \end{align}
-where $\psi \in \Psi \subset \reals^q$ is a transformation of the (possibly vectorial) parameter $\theta \in \Theta$,
-and $\mbf{b}(\psi)$ a scalar function of $\psi$ (or, in turn, of $\theta$).
-$\tau(\vec{x})$ is a function of the sample $\vec{x}$ that fulfills $\tau(\vec{x}) = \sum_{i=1}^n \tau^*(x_i)$,
-with $\tau^*(x_i) \in \mathcal{T} \subset \reals^q$,
-while $\langle\cdot, \cdot\rangle$ denotes the scalar product.
+The ingredients of the decomposition are:
+\begin{itemize}
+\item $\psi \in \Psi \subset \reals^q$, a transformation of the (possibly vectorial) parameter $\theta \in \Theta$,
+called the \emph{natural parameter} of the canonical exponential family;
+\item $\mbf{b}(\psi)$, a scalar function of $\psi$ (or, in turn, of $\theta$);
+\item $a(\vec{x})$, a scalar function of $\vec{x}$;
+\item $\tau(\vec{x})$, a sufficient statistic of the sample $\vec{x}$ which has the same dimension as $\psi$.
+It holds that $\tau(\vec{x}) = \sum_{i=1}^n \tau^*(x_i)$,
+where $\tau^*(x_i) \in \mathcal{T} \subset \reals^q$.
+\item $\langle\cdot, \cdot\rangle$ denotes the scalar product,
+i.e., for $u, v \in \reals^q$ is $\langle u, v\rangle = \sum_{j=1}^q u_j \cdot v_j$.
+\end{itemize}
+In this exercise, we will only consider one-parametric exponential family distributions,
+such that $q=1$ and $\langle \psi, \tau(\vec{x}) \rangle = \psi \cdot \tau(\vec{x})$.
 
+From these ingredients, a conjugate prior on $\psi$ can be constructed as
+\begin{align}
+p(\psi \mid \nz, \yz) \dd\psi
+ &\propto \exp\Big\{ \nz \Big[ \langle \yz, \psi \rangle - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,,
+\label{eq:canonicalprior}
+\end{align}
+where $\nz > 0$ and $\yz \in \mathcal{T}$ are the parameters by which a certain prior can be specified.%
+\footnote{Actually, the domain of $\yz$ is $\mathcal{Y}$, defined as the interior of the convex hull of $\mathcal{T}$;
+these intricacies do not matter in this exercise however.}
+We will refer to priors of the form~\eqref{eq:canonicalprior} as \emph{canonically constructed priors}.
+Note that \eqref{eq:canonicalprior} is a distribution over the natural parameter $\psi$ and not over the usual parameter $\theta$.
+When $\psi \neq \theta$ it can be useful to transform the density over $\psi$ to a density over $\theta$.
+
+The prior parameters $\nz$ and $\yz$ are updated to their posterior values $\nn$ and $\yn$ by
+\begin{align}\label{eq:canonicalupdate}
+\nn &= \nz + n\,, &
+\yn &= \frac{\nz}{\nz + n} \cdot \yz + \frac{n}{\nz + n} \cdot \frac{\tau(\vec{x})}{n}\,,
+\end{align}
+and the posterior can be written as
+\begin{align}\label{eq:canonicalposterior}
+p(\psi \mid \vec{x}, \nz, \yz)
+ &= p(\psi \mid \nn, \yn) \nonumber\\
+ &\propto \exp\Big\{ \nn \Big[ \langle \yn, \psi \rangle - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,.
+\end{align}
+In this setting, $\yz$ and $\yn$ can be seen as the parameter describing the main characteristics of the prior and the posterior,
+and thus we will call them \emph{main prior} and \emph{main posterior parameter}, respectively.
+$\yz$ can also be understood as a prior guess for the mean sufficient statistic $\ttau(\vec{x}) := \tau(\vec{x})/n$.%
+\footnote{This is because $\E[\ttau(\vec{x}) \mid \psi] = \nabla\mbf{b}(\psi)$,
+where in turn $\E[\nabla\mbf{b}(\psi) \mid \nz, \yz] = \yz$ \cite[e.g.,][Prop.~5.7, p.~275]{2000:bernardosmith}.
+Nevermind.}
+Here, $\yn$ is a weighted average of this prior guess $\yz$ and the sample `mean' $\ttau(\vec{x})$,
+with weights $\nz$ and $n$, respectively.
+Again, $\nz$ can be seen as ``prior strength'' or ``pseudocount'',
+reflecting the weight one gives to the prior as compared to the sample size $n$.
+
+\begin{myex}
+Confirm \eqref{eq:canonicalupdate},
+the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$,
+for one-parametric exponential family distributions.
+Do this by using the last expression in \eqref{eq:bayesrule}
+and consider only the terms related to $\psi$ for the posterior.
+\end{myex}
+
+
+\section{The Beta distribution as canonically constructed conjugate prior}
+
+This looks all suspiciously similar to the reparametrised Beta distribution above.
+Indeed, the $\be(\nz,\yz)$ is the canonically constructed prior to the Binomial distribution:
+The pmf \eqref{eq:binompmf} can be rewritten as follows:
+\begin{align}
+f(s\mid p)
+ &= {n \choose s} p^s (1-p)^{n-s} \\
+ &= {n \choose s} \exp\Big\{ \log\Big(\frac{\theta}{1-\theta}\Big) s - n \big(-\log(1-\theta)\big) \Big\} \,.
+%\label{}
+\end{align}
+We have thus $\psi = \log(\theta/(1-\theta))$, $\mbf{b}(\psi) = -\log(1-\theta)$, and $\tau(\vec{x}) = s$.
+The function $\log(\theta/(1-\theta))$ is known as the \emph{logit}, denoted by $\logit(\theta)$.
 
 
 \end{document}
