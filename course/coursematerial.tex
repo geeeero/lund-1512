@@ -16,6 +16,7 @@
 \usepackage{todonotes}
 \usepackage{etoolbox}
 \usepackage{url}
+\usepackage{enumerate}
 %\usepackage{tikz}
 %\usetikzlibrary{shapes.misc,fit}
 
@@ -70,26 +71,26 @@ and information about unknown parameters is then expressed by a so-called prior 
 a distribution over the parameter(s) of the data generating function.
 
 As running example, let us consider an experiment with two possible outcomes,
-success and failure. The number of successes $x$ in a series of $n$ independent trials
+success and failure. The number of successes $s$ in a series of $n$ independent trials
 has then a Binomial distribution with parameters $p$ and $n$,
 where $n$ is known but $p \in [0,1]$ is unknown.
-In short, $X\mid p \sim \bin(n,p)$, which means
+In short, $S\mid p \sim \bin(n,p)$, which means
 \begin{align*}
-f(x\mid p) &= P(X = x \mid p) = {n \choose x} p^x (1-p)^{n-x},\quad x \in \{0, 1, \ldots, n\}\,.
+f(s\mid p) &= P(S = s \mid p) = {n \choose s} p^s (1-p)^{n-s},\quad s \in \{0, 1, \ldots, n\}\,.
 \end{align*}
 Information about unknown parameters (here, $p$) is then expressed
 by a so-called prior distribution, some distribution with some pdf, here $f(p)$.
 
 The `complete picture' is then the so-called posterior distribution,
-here with pdf $f(p\mid x)$, expressing the state of knowledge after having seen the data.
+here with pdf $f(p\mid s)$, expressing the state of knowledge after having seen the data.
 It encompasses information from the prior $f(p)$ and data
 and is obtained via Bayes' Rule,
 \begin{align}
-f(p \mid x) &= \frac{f(x\mid p) f(p)}{\int f(x\mid p) f(p) \dd p}
-             = \frac{f(x\mid p) f(p)}{f(x)} \propto f(x\mid p) f(p)\,,
+f(p \mid s) &= \frac{f(s\mid p) f(p)}{\int f(s\mid p) f(p) \dd p}
+             = \frac{f(s\mid p) f(p)}{f(s)} \propto f(s\mid p) f(p)\,,
 \label{eq:bayesrule}
 \end{align}
-where $f(x)$ is the so-called marginal distribution of the data $X$.
+where $f(s)$ is the so-called marginal distribution of the data $S$.
 
 In general, the posterior distribution is hard to obtain,
 especially due to the integral in the denominator.
@@ -128,18 +129,18 @@ In short, we write $p \sim \be(\alpha,\beta)$.
 From now on, we will denote prior parameter values by an upper index~${}\uz$,
 and updated, posterior parameter values by an upper index~${}\un$.
 With this notational convention,
-let $X\mid p \sim \bin(n,p)$ and $p \sim \be(\az,\bz)$.
-Then it holds that $p \mid x \sim \be(\an,\bn)$,
+let $S\mid p \sim \bin(n,p)$ and $p \sim \be(\az,\bz)$.
+Then it holds that $p \mid s \sim \be(\an,\bn)$,
 where $\an$ and $\bn$ are updated, posterior parameters, obtained as
 \begin{align}
-\an &= \az + x\,, & \bn &= \bz + n - x \,.
+\an &= \az + s\,, & \bn &= \bz + n - s \,.
 \label{eq:betapostab}
 \end{align}
 From this we can see that $\az$ and $\bz$ can be interpreted as pseudocounts,
 forming a hypothetical sample with $\az$ sucesses and $\bz$ failures.
 \begin{myex}
 Confirm \eqref{eq:betapostab}, i.e.,
-show that, when $X\mid p \sim \bin(n,p)$ and $p \sim \be(\az,\bz)$,
+show that, when $S\mid p \sim \bin(n,p)$ and $p \sim \be(\az,\bz)$,
 the density of the posterior distribution for $p$ is of the form \eqref{eq:betadensab}
 but with updated parameters.
 (Hint: use the last expression in \eqref{eq:bayesrule}
@@ -160,10 +161,10 @@ f(p\mid\nz,\yz) &= \frac{p^{\nz\yz-1}\, (1-p)^{\nz(1-\yz)-1}}{B(\nz\yz,\nz(1-\yz
 In this parametrisation, the updated, posterior parameters are given by
 \begin{align}
 \nn &= \nz + n\,, &
-\yn &= \frac{\nz}{\nz + n} \cdot \yz + \frac{n}{\nz + n} \cdot \frac{x}{n}\,,
+\yn &= \frac{\nz}{\nz + n} \cdot \yz + \frac{n}{\nz + n} \cdot \frac{s}{n}\,,
 \label{eq:betapostny}
 \end{align}
-and so we write $p\mid x \sim \be(\nn,\yn)$.
+and we write $p\mid s \sim \be(\nn,\yn)$.
 
 \begin{myex}
 Confirm the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$.
@@ -181,22 +182,72 @@ we see that $\nz$ can also be interpreted as a (total) pseudocount or prior stre
 \begin{myex}
 Write a function \code{dbetany(x,n,y, ...)}
 that returns the value of the Beta density function at \code{x}
-for parameters $\nz$, $\yz$ instead of \code{shape1} ($=\alpha$) and \code{shape2} ($=\beta$)
+for parameters $\nz$ and $\yz$ instead of \code{shape1} ($=\alpha$) and \code{shape2} ($=\beta$)
 as in \code{dbeta(x, shape1, shape2, ...)}.
 Use your function to plot the Beta pdf for different values of $\nz$ and $\yz$
 to see how the pdf changes according to the parameter values.
 \end{myex}
 
 The formula for $\yn$ in \eqref{eq:betapostny} is not written in the most compact form
-to emphasize that $\yn$, the posterior expectation of $p$,
-is a weighted average of the prior expectation $\yz$ and $x/n$ (the fraction of successes in the data),
+in order to emphasize that $\yn$, the posterior expectation of $p$,
+is a weighted average of the prior expectation $\yz$ and $s/n$ (the fraction of successes in the data),
 with the weights $\nz$ and $n$, respectively.
 We see that $\nz$ plays the same role for the prior mean $\yz$
-as the sample size $n$ for the observed mean $x/n$,
-reinforcing the notion of pseudocount.
+as the sample size $n$ for the observed mean $s/n$,
+reinforcing the interpretation as pseudocount.
 Indeed, the higher $\nz$, the higher the weight for $\yz$
 in the weighted average calculation of $\yn$,
 so $\nz$ gives the strength of the prior as compared to the sample size $n$.
+
+\begin{myex}
+Give a ceteris paribus analysis for $\E[p\mid s] = \yn$ and $\V(p\mid s) = \frac{\yn (1-\yn)}{\nn + 1}$
+(i.e, discuss how $\E[p\mid x]$ and $\V(p\mid s)$ behave) when
+\begin{enumerate}[(i)]
+\item $\nz \to 0$,
+\item $\nz \to \infty$, and
+\item $n\to \infty$ when $s/n = \text{const}$.
+\end{enumerate}
+and consider also the form of $f(p\mid s)$ based on $\E[p\mid s]$ and $\V(p\mid s)$.
+\end{myex}
+
+
+\section{Conjugate priors for canonical exponential families}
+
+Fortunately it is not necessary to search or guess to find a conjugate prior to a certain data distribution,
+as there is a general result on how to construct conjugate priors
+when the sample distribution belongs to a so-called \emph{canonical exponential family}
+\cite[e.g.,][pp.~202 and 272f]{2000:bernardosmith}. %Def.~4.12 and Prop.~5.6
+This result covers many sample distributions, %relevant in a statistician's everyday life,
+like Normal and Multinomial models, Poisson models, or Exponential and Gamma models,
+and gives a common structure to all conjugate priors constructed in this way.
+
+For the construction, we will consider distributions of i.i.d.\ samples $\vec{x} = (x_1,\ldots,x_n)$ of size $n$ directly.%
+\footnote{\label{foot:dataisplural}It would be possible, and indeed is often done in the literature,
+to consider a single observation $x$ in \eqref{eq:expofam-sampledens} only,
+as the conjugacy property does not depend on the sample size.
+However, we find our version with $n$-dimensional i.i.d.\ sample $\vec{x}$
+more appropriate.} %, as `data is plural' (kaplan?).}
+With the Binomial distribution, we did so indirectly:
+It results from $n$ independent trials, which, encoded as $1=$ success and $0=$ failure, form a vector $\vec{x}$.
+It turns out that the sample distribution depends on $\vec{x}$ only through $s=\sum_{i=1}^n x_i$:
+\begin{align*}
+f(\vec{x} \mid p) &= P(\vec{X} = \vec{x}) = \prod_{i=1}^n p^{x_i} (1-p)^{1-x_i} \\
+ &= {n \choose s} p^s (1-p)^{n-s} = P(S = s \mid p) = f(s\mid p)
+\end{align*}
+Such a summary function of a sample $\vec{x}$ is called \emph{a sufficient statistic of $\vec{x}$}.
+
+
+A sample distribution is said to belong to the \emph{canonical exponential family}
+if its density or mass function satisfies the decomposition
+\begin{align}
+f(\vec{x} \mid \theta) &= a(\vec{x})\exp\big\{\langle \psi, \tau(\vec{x}) \rangle - n \mbf{b}(\psi)\big\}\,,
+\label{eq:expofam-sampledens}
+\end{align}
+where $\psi \in \Psi \subset \reals^q$ is a transformation of the (possibly vectorial) parameter $\theta \in \Theta$,
+and $\mbf{b}(\psi)$ a scalar function of $\psi$ (or, in turn, of $\theta$).
+$\tau(\vec{x})$ is a function of the sample $\vec{x}$ that fulfills $\tau(\vec{x}) = \sum_{i=1}^n \tau^*(x_i)$,
+with $\tau^*(x_i) \in \mathcal{T} \subset \reals^q$,
+while $\langle\cdot, \cdot\rangle$ denotes the scalar product.
 
 
 
