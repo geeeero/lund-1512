@@ -2,7 +2,11 @@ course/.Rhistory
 course/.Rproj.user
 *~
 *.aux
+*blx.bib
+*.bbl
+*.blg
 *.log
 *.out
 *.pdf
+*.run.xml
 *.toc

@@ -20,6 +20,10 @@
 %\usepackage{tikz}
 %\usetikzlibrary{shapes.misc,fit}
 
+\usepackage[backend=bibtex, style=authoryear, maxbibnames=4, minbibnames=4, %
+            block=space, backref=false, dashed=false, firstinits=true, sorting=nyt]{biblatex}
+\addbibresource{../bib/lundrefs.bib}
+
 \usepackage[bookmarks]{hyperref}
 
 \newcommand{\reals}{\mathbb{R}}
@@ -219,7 +223,7 @@ and consider also the form of $f(p\mid s)$ based on $\E[p\mid s]$ and $\V(p\mid 
 Fortunately it is not necessary to search or guess to find a conjugate prior to a certain data distribution,
 as there is a general result on how to construct conjugate priors
 when the sample distribution belongs to a so-called \emph{canonical exponential family}
-\cite[e.g.,][pp.~202 and 272f]{2000:bernardosmith}. %Def.~4.12 and Prop.~5.6
+\parencite[e.g.,][pp.~202 and 272f]{2000:bernardosmith}. %Def.~4.12 and Prop.~5.6
 This result covers many sample distributions, %relevant in a statistician's everyday life,
 like Normal and Multinomial models, Poisson models, or Exponential and Gamma models,
 and gives a common structure to all conjugate priors constructed in this way.
@@ -293,7 +297,7 @@ In this setting, $\yz$ and $\yn$ can be seen as the parameter describing the mai
 and thus we will call them \emph{main prior} and \emph{main posterior parameter}, respectively.
 $\yz$ can also be understood as a prior guess for the mean sufficient statistic $\ttau(\vec{x}) := \tau(\vec{x})/n$.%
 \footnote{This is because $\E[\ttau(\vec{x}) \mid \psi] = \nabla\mbf{b}(\psi)$,
-where in turn $\E[\nabla\mbf{b}(\psi) \mid \nz, \yz] = \yz$ \cite[e.g.,][Prop.~5.7, p.~275]{2000:bernardosmith}.
+where in turn $\E[\nabla\mbf{b}(\psi) \mid \nz, \yz] = \yz$, see \textcite[Prop.~5.7, p.~275]{2000:bernardosmith}.
 Nevermind.}
 Here, $\yn$ is a weighted average of this prior guess $\yz$ and the sample `mean' $\ttau(\vec{x})$,
 with weights $\nz$ and $n$, respectively.
@@ -354,7 +358,7 @@ or, if you want to avoid a density transformation, the Normal distribution with 
 \end{myex}
 
 
-\section{Prior-data Conflict}
+\section{Prior-data conflict}
 
 \eqref{eq:canonicalupdate}
 
@@ -362,5 +366,6 @@ or, if you want to avoid a density transformation, the Normal distribution with 
 
 
 
+\printbibliography
 
 \end{document}
