@@ -47,6 +47,8 @@
 \newcommand{\be}{\operatorname{Beta}} 
 \newcommand{\bebin}{\operatorname{Beta-binomial}} 
 
+\newcommand{\code}[1]{\emph{\ttfamily #1}}
+
 \newtheorem{myex}{Exercise}
 
 \input{nydefs.tex}
@@ -63,8 +65,13 @@
 Bayesian inference allows to combine information from data
 and information extraneous to data (e.g., expert information)
 into a `complete picture'.
-Data $X$ is assumed to be generated from a certain parametric distribution family,
-e.g., a Binomial distribution with parameters $p$ and $n$,
+Data $\vec{x}$ is assumed to be generated from a certain parametric distribution family,
+and information about unknown parameters is then expressed by a so-called prior distribution,
+a distribution over the parameter(s) of the data generating function.
+
+As running example, let us consider an experiment with two possible outcomes,
+success and failure. The number of successes $x$ in a series of $n$ independent trials
+has then a Binomial distribution with parameters $p$ and $n$,
 where $n$ is known but $p \in [0,1]$ is unknown.
 In short, $X\mid p \sim \bin(n,p)$, which means
 \begin{align*}
@@ -93,7 +100,7 @@ and software like BUGS or JAGS has been developed
 which simplifies the creation of a sampler to approximate a posterior.
 
 
-\section{Conjugate priors}
+\section{A conjugate prior}
 
 However, Bayesian inference not necessarily entails complex calculations and simulation methods.
 With a clever choice of parametric family for the prior distribution,
@@ -101,8 +108,9 @@ the posterior distribution belongs to the same parametric family as the prior,
 just with updated parameters.
 Such prior distributions are called \emph{conjugate} priors.
 Basically, with conjugate priors one trades flexibility for tractability:
-The parametric family restricts the form of the prior,
-but with the advantage of much easier computations.
+The parametric family restricts the form of the prior pdf,
+but with the advantage of much easier computations.%
+\footnote{In fact, practical Bayesian inference was mostly restricted to conjugate priors before the advent of MCMC.}
 
 The conjugate prior for the Binomial distribution is the Beta distribution,
 which is usually parametrised with parameters $\alpha$ and $\beta$.
@@ -115,28 +123,27 @@ where $B(\cdot,\cdot)$ is the Beta function.%
 and gives the inverse normalisation constant for the Beta distribution.
 It is related to the Gamma function through $B(a,b) = \frac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$.
 We will not need to work with Beta functions here.}
-In short, we write $p \sim \beta(\alpha,\beta)$.
+In short, we write $p \sim \be(\alpha,\beta)$.
 
-From now on, we will denote prior parameter values by an upper index ${}\uz$,
-and updated, posterior parameter values by an upper index ${}\un$.
-
+From now on, we will denote prior parameter values by an upper index~${}\uz$,
+and updated, posterior parameter values by an upper index~${}\un$.
 With this notational convention,
-let $X\mid p \sim \bin(n,p)$ and $p \sim \beta(\az,\bz)$.
+let $X\mid p \sim \bin(n,p)$ and $p \sim \be(\az,\bz)$.
 Then it holds that $p \mid x \sim \be(\an,\bn)$,
 where $\an$ and $\bn$ are updated, posterior parameters, obtained as
 \begin{align}
 \an &= \az + x\,, & \bn &= \bz + n - x \,.
 \label{eq:betapostab}
 \end{align}
-***Interpretation***
-
+From this we can see that $\az$ and $\bz$ can be interpreted as pseudocounts,
+forming a hypothetical sample with $\az$ sucesses and $\bz$ failures.
 \begin{myex}
 Confirm \eqref{eq:betapostab}, i.e.,
-show that, when $X\mid p \sim \bin(n,p)$ and $p \sim \beta(\az,\bz)$,
+show that, when $X\mid p \sim \bin(n,p)$ and $p \sim \be(\az,\bz)$,
 the density of the posterior distribution for $p$ is of the form \eqref{eq:betadensab}
 but with updated parameters.
 (Hint: use the last expression in \eqref{eq:bayesrule}
-and consider in the posterior only the terms related to $p$.)
+and consider only the terms related to $p$ for the posterior.)
 \end{myex}
 
 You have seen in the talk that we considered a different parametrisation of the Beta distribution
@@ -159,8 +166,8 @@ In this parametrisation, the updated, posterior parameters are given by
 and so we write $p\mid x \sim \be(\nn,\yn)$.
 
 \begin{myex}
-Confirm the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$,
-starting either from \eqref{eq:betapostab} or \eqref{eq:betadensny}.
+Confirm the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$.
+(Hint: You can start either from \eqref{eq:betapostab} or \eqref{eq:betadensny}.)
 \end{myex}
 
 From the properties of the Beta distribution,
@@ -168,29 +175,25 @@ it follows that $\yz = \frac{\az}{\az+\bz} = \E[p]$
 is the prior expectation for the success probability $p$,
 and that the higher $\nz$, the more probability weight will be concentrated around $\yz$,
 as $\V(p) = \frac{\yz (1-\yz)}{\nz + 1}$.
+From the interpretation of $\alpha$ and $\beta$ and \eqref{eq:betareparam},
+we see that $\nz$ can also be interpreted as a (total) pseudocount or prior strength.
 
 \begin{myex}
-Write a function \texttt{dbetany(x,n,y, ...)}
-that returns the value of the Beta density function at \texttt{x}
-for parameters $\nz$, $\yz$ instead of \texttt{shape1} ($=\alpha$) and \texttt{shape2} ($=\beta$)
-as in \texttt{dbeta(x, shape1, shape2, ...)}.
-Use your function to plot the Beta density for different parameter values
-to see how the density changes according to the parameter values.
+Write a function \code{dbetany(x,n,y, ...)}
+that returns the value of the Beta density function at \code{x}
+for parameters $\nz$, $\yz$ instead of \code{shape1} ($=\alpha$) and \code{shape2} ($=\beta$)
+as in \code{dbeta(x, shape1, shape2, ...)}.
+Use your function to plot the Beta pdf for different values of $\nz$ and $\yz$
+to see how the pdf changes according to the parameter values.
 \end{myex}
 
-$\nz$ can also be interpreted as a pseudocount or prior strength,
-(do you see how this is clear from the interpretation of $\alpha$ and $\beta$ and \eqref{eq:betareparam}?)
-
-***Fomula for $\yn$ in \eqref{eq:betapostny} not written in the most compact form
-to emphasize thet the $\yz$ update has a peculiar form:***
-
-so after seeing that $s$ out of $n$ components function (at time $t$),
-the posterior mean $\yn$ for $p$ is a weighted average of
-the prior mean $\yz$ and $s/n$ (the fraction of functioning components in the data),
+The formula for $\yn$ in \eqref{eq:betapostny} is not written in the most compact form
+to emphasize that $\yn$, the posterior expectation of $p$,
+is a weighted average of the prior expectation $\yz$ and $x/n$ (the fraction of successes in the data),
 with the weights $\nz$ and $n$, respectively.
 We see that $\nz$ plays the same role for the prior mean $\yz$
-as the sample size $n$ for the observed mean $s/n$,
-thus the notion of pseudocount.
+as the sample size $n$ for the observed mean $x/n$,
+reinforcing the notion of pseudocount.
 Indeed, the higher $\nz$, the higher the weight for $\yz$
 in the weighted average calculation of $\yn$,
 so $\nz$ gives the strength of the prior as compared to the sample size $n$.
