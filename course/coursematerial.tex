@@ -418,13 +418,67 @@ to your working directory and then executing\\
 %\verb+install.packages("http://download.r-forge.r-project.org/src/contrib/luck_0.9.tar.gz", repos = NULL, type = "source")+
 at the \textbf{R} prompt.
 If there is a problem, try installing the package \code{TeachingDemos} first.
-***play around, plot prior/posterior parameter sets.
+After installation, load the package by executing \code{library(luck)}.
+\begin{enumerate}[(i)]
+\item Use the functions \code{LuckModel()} and \code{LuckModelData()}
+to create a \code{LuckModel} object corresponding to a parameter set $\PZ$ with an interval for both $\nz$ and $\yz$,
+and that contains data such that $\tau(\vec{x})/n \in [\yzl, \yzu]$.
+Create a second \code{LuckModel} object with the same $\PZ$ but for which $\tau(\vec{x})/n \not\in [\yzl, \yzu]$.
+\item Plot the prior and posterior parameter sets $\PZ$ and $\PN$ for both objects.
+You can find the help for the plot function for \code{LuckModel} objects via \code{?luck::plot}.
+To plot $\PN$, you need to supply the option \code{control=controlList(posterior=TRUE)};
+to plot a second parameter set in the same plot window, use \code{add=TRUE}.
+(You may need to set \code{xlim} and \code{ylim} to make the plotting region large enough!)
+\item Can you explain why the two $\PN$'s have different shapes,
+and how their respective shapes come about?
+(Hint: Each point in the upper bound of $\PN$ is a weighted average of $\yzu$ and $\tau(\vec{x})/n$.)
+\item Vary the $\yz$ interval, the $\nz$ interval, the sample statistic $\tau(\vec{x})$, the sample size $n$,
+and observe the effect each has on $\PN$.
+What happens to $\PZ$ when $\nz \to \infty$ with $\ttau(\vec{x}) = \tau(\vec{x})/n$ constant?
+%(sets shrink towards $\ttau(\vec{x})$ for $n \to \infty$, \dots, as in \parencite[\S 3.1.2]{2013:diss-gw}).
+\end{enumerate}
 \end{myex}
 
-***$\ynl$, $\ynu$ formulas. $\ynu-\ynl$ formula? \parencite[p.~65]{2013:diss-gw}
+A model with $\PZ = \nz \times [\yzl, \yzu]$ corresponds to a vertical slice of the plotted sets $\PZ$.
+The posterior parameter set is a vertical slice as well and can be expressed as $\PN = \nn \times [\ynl, \ynu]$,
+where $\ynl$ and $\ynu$ result from updating $\yzl$ and $\yzu$, respectively:
+\begin{align}
+\ynl &= \frac{\nz\yzl + \tau(\vec{x})}{\nz + n}\,, &
+\ynu &= \frac{\nz\yzu + \tau(\vec{x})}{\nz + n}\,.
+\end{align}
+The posterior imprecision in the $y$ dimension, denoted by $\Delta_y(\PN)$, is 
+\begin{align}
+\label{eq:deltay}
+\Delta_y(\PN) &= \ynu - \ynl = \frac{\nz (\yzu - \yzl)}{\nz +n}\,.
+\end{align}
+\begin{myex}
+Do you see from \eqref{eq:deltay} why models with $\PZ = \nz \times [\yzl, \yzu]$ are insensitive to prior-data conflict?
+\end{myex}
+%***$\ynl$, $\ynu$ formulas. $\ynu-\ynl$ formula? \parencite[p.~65]{2013:diss-gw}
+When $\PZ = [\nzl, \nzu] \times [\yzl, \yzu]$, things are different, as you have seen.
+Then, the lower and upper bound in the $y$ dimension are given by
+\begin{align}
+\label{eq:ynl}
+\ynl &= \inf_{\PN} \yn = \begin{cases} \dfrac{\nzu}{\nzu + n}\,\yzl + \dfrac{n}{\nzu + n}\,\ttaux & \ttaux \geq \yzl \\[2ex]
+                                       \dfrac{\nzl}{\nzl + n}\,\yzl + \dfrac{n}{\nzl + n}\,\ttaux & \ttaux <    \yzl \end{cases}\,,\\
+\label{eq:ynu}
+\ynu &= \sup_{\PN} \yn = \begin{cases} \dfrac{\nzu}{\nzu + n}\,\yzu + \dfrac{n}{\nzu + n}\,\ttaux & \ttaux \leq \yzu \\[2ex]
+                                       \dfrac{\nzl}{\nzl + n}\,\yzu + \dfrac{n}{\nzl + n}\,\ttaux & \ttaux >    \yzu \end{cases}\,.
+\end{align}
+\begin{myex}
+Which cases in \eqref{eq:ynl} and \eqref{eq:ynu} correspond to prior-data conflict?
+What do they have in common, and how does this link to what you saw in the $\PN$ plots?
+\end{myex}
+The posterior imprecision in the $y$ dimension can be expressed by
+\begin{align}
+\Delta_y(\PN) &= \frac{\nzu (\yzu - \yzl)}{\nzu + n}\\
+              &\qquad + \inf_{\yz \in [\yzl,\yzu]} |\ttaux - \yz| \frac{n (\nzu - \nzl)}{(\nzl + n)(\nzu + n)}\,.
+\end{align}
+Note that the expression $\inf_{\yz \in [\yzl,\yzu]} |\ttaux - \yz| = 0$ when $\ttaux \in [\yzl, \yzu]$,
+otherwise it gives the distance of $\ttaux$ to the $\yz$ interval.
 
-***general behaviour of sets
-(sets shrink towards $\ttau(\vec{x})$ for $n \to \infty$, \dots, as in \parencite[\S 3.1.2]{2013:diss-gw}).
+
+\section{Sets of conjugate priors for data $X \sim \norm(\mu,1)$}
 
 ***plot sets of prior/posterior cdfs, union of HPD intervals.
 
