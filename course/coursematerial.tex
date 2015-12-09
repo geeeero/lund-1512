@@ -176,7 +176,8 @@ and we write $p\mid s \sim \be(\nn,\yn)$.
 
 \begin{myex}
 Confirm the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$.
-(Hint: You can start either from \eqref{eq:betapostab} or \eqref{eq:betadensny}.)
+(Hint: Find expressions for $\az$ and $\bz$ in terms of $\nz$ and $\yz$,
+then use \eqref{eq:betapostab} and solve for $\nn$ and $\yn$.)
 \end{myex}
 
 From the properties of the Beta distribution,
@@ -322,31 +323,31 @@ The pmf \eqref{eq:binompmf} can be rewritten as follows:
 \begin{align}
 f(s\mid p)
  &= {n \choose s} p^s (1-p)^{n-s} \\
- &= {n \choose s} \exp\Big\{ \log\Big(\frac{\theta}{1-\theta}\Big) s - n \big(-\log(1-\theta)\big) \Big\} \,.
+ &= {n \choose s} \exp\Big\{ \log\Big(\frac{p}{1-p}\Big) s - n \big(-\log(1-p)\big) \Big\} \,.
 %\label{}
 \end{align}
-We have thus $\psi = \log(\theta/(1-\theta))$, $\mbf{b}(\psi) = -\log(1-\theta)$, and $\tau(\vec{x}) = s$.
-The function $\log(\theta/(1-\theta))$ is known as the \emph{logit}, denoted by $\logit(\theta)$.
+We have thus $\psi = \log(p/(1-p))$, $\mbf{b}(\psi) = -\log(1-p)$, and $\tau(\vec{x}) = s$.
+The function $\log(p/(1-p))$ is known as the \emph{logit}, denoted by $\logit(p)$.
 Constructing the prior from these ingredients leads to
 \begin{align}
-f\big(\logit(\theta) \mid \nz, \yz\big) \dd\psi %\dd\log\big(\frac{\theta}{1-\theta}\big)
- &\propto \exp\Big\{ \nz \Big[ \yz \log\Big(\frac{\theta}{1-\theta}\Big) + \log(1-\theta) \Big] \Big\} \dd\psi\,.
+f\big(\psi \mid \nz, \yz\big) \dd\psi %\dd\log\big(\frac{\theta}{1-\theta}\big)
+ &\propto \exp\Big\{ \nz \Big[ \yz \log\Big(\frac{p}{1-p}\Big) + \log(1-p) \Big] \Big\} \dd\psi\,.
  %\dd\log\big(\frac{\theta}{1-\theta}\big)\,.
 \end{align}
-To transform this density over $\psi$ to a density over $\theta$,
+To transform this density over $\psi$ to a density over $p$,
 we have to multiply it with
 \begin{align}
-\left|\frac{\dd\psi}{\dd\theta}\right|
- &= \left|\frac{\dd}{\dd\theta} \log\Big(\frac{\theta}{1-\theta}\Big)\right|
-  = \left| \frac{1-\theta}{\theta}\left(\frac{(1-\theta)+\theta}{(1-\theta)^2}\right) \right|
-  = \frac{1}{\theta(1-\theta)}\,,
+\left|\frac{\dd\psi}{\dd p}\right|
+ &= \left|\frac{\dd}{\dd p} \log\Big(\frac{p}{1-p}\Big)\right|
+  = \left| \frac{1-p}{p}\left(\frac{(1-p)+p}{(1-p)^2}\right) \right|
+  = \frac{1}{p(1-p)}\,,
 \end{align}
 and so we get
 \begin{align}
-\lefteqn{f(\theta\mid \nz, \yz)\dd\theta} \qquad \\  
- &= f(\psi\mid \nz, \yz) \left|\frac{\dd\psi}{\dd\theta}\right| \dd\theta\\
- &\propto \exp\Big\{ \nz\yz\log(\theta) + \big(\nz - \nz\yz\log(1-\theta)\big)\Big\} \frac{1}{\theta(1-\theta)}\dd\theta\\
- &= \theta^{\nz\yz - 1} (1-\theta)^{\nz(1-\yz) - 1} \dd\theta\,.
+\lefteqn{f(p\mid \nz, \yz)\dd p} \qquad \\  
+ &= f(\psi\mid \nz, \yz) \left|\frac{\dd\psi}{\dd p}\right| \dd p\\
+ &\propto \exp\Big\{ \nz\yz\log(p) + \big(\nz - \nz\yz\log(1-p)\big)\Big\} \frac{1}{p(1-p)}\dd p\\
+ &= p^{\nz\yz - 1} (1-p)^{\nz(1-\yz) - 1} \dd p\,.
 \end{align}
 This is indeed the Beta distribution \eqref{eq:betadensny}.%with parameters $\nz\yz$ and $\nz(1-\yz)$.
 
