@@ -61,12 +61,22 @@
 
 \input{nydefs.tex}
 
-\title{Generalized Bayesian Inference\\ with Sets of Conjugate Priors}
+\allowdisplaybreaks
+
+\title{Generalized Bayesian Inference\\ with Sets of Conjugate Priors\\ for Dealing with Prior-Data Conflict}
 \author{Gero Walter}
 \date{Lund University, 15.12.2015}
 
 \begin{document}
 \maketitle
+
+This document is a step-by-step guide on how sets of priors can be used
+to better reflect prior-data conflict in the posterior.
+First we explain what conjugate priors are along an example.
+Then we show how conjugate priors can be constructed using a general result,
+and why they usually do not reflect prior-data conflict.
+In the last part, we see how to use sets of conjugate priors
+to deal with this problem.
 
 \section{Bayesian basics}
 
@@ -147,16 +157,16 @@ where $\an$ and $\bn$ are updated, posterior parameters, obtained as
 From this we can see that $\az$ and $\bz$ can be interpreted as pseudocounts,
 forming a hypothetical sample with $\az$ sucesses and $\bz$ failures.
 \begin{myex}
-Confirm \eqref{eq:betapostab}, i.e.,
+Confirm Eq.~\eqref{eq:betapostab}, i.e.,
 show that, when $S\mid p \sim \bin(n,p)$ and $p \sim \be(\az,\bz)$,
-the density of the posterior distribution for $p$ is of the form \eqref{eq:betadensab}
+the density of the posterior distribution for $p$ is of the form Eq.~\eqref{eq:betadensab}
 but with updated parameters.
-(Hint: use the last expression in \eqref{eq:bayesrule}
-and consider only the terms related to $p$ for the posterior.)
+(Hint: use the last expression in Eq.~\eqref{eq:bayesrule}
+and consider for the posterior the terms related to $p$ only.)
 \end{myex}
 
 You have seen in the talk that we considered a different parametrisation of the Beta distribution
-in terms of $\nz$ and $\yz$, obtained as
+in terms of $\nz$ and $\yz$, defined as
 \begin{align}
 \nz &= \az + \bz\,, & \yz &= \frac{\az}{\az+\bz}\,,
 \label{eq:betareparam}
@@ -177,7 +187,7 @@ and we write $p\mid s \sim \be(\nn,\yn)$.
 \begin{myex}
 Confirm the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$.
 (Hint: Find expressions for $\az$ and $\bz$ in terms of $\nz$ and $\yz$,
-then use \eqref{eq:betapostab} and solve for $\nn$ and $\yn$.)
+then use Eq.~\eqref{eq:betapostab} and solve for $\nn$ and $\yn$.)
 \end{myex}
 
 From the properties of the Beta distribution,
@@ -185,7 +195,7 @@ it follows that $\yz = \frac{\az}{\az+\bz} = \E[p]$
 is the prior expectation for the success probability $p$,
 and that the higher $\nz$, the more probability weight will be concentrated around $\yz$,
 as $\V(p) = \frac{\yz (1-\yz)}{\nz + 1}$.
-From the interpretation of $\alpha$ and $\beta$ and \eqref{eq:betareparam},
+From the interpretation of $\alpha$ and $\beta$ and Eq.~\eqref{eq:betareparam},
 we see that $\nz$ can also be interpreted as a (total) pseudocount or prior strength.
 
 \begin{myex}\label{ex:dbetany}
@@ -197,7 +207,7 @@ Use your function to plot the Beta pdf for different values of $\nz$ and $\yz$
 to see how the pdf changes according to the parameter values.
 \end{myex}
 
-The formula for $\yn$ in \eqref{eq:betapostny} is not written in the most compact form
+The formula for $\yn$ in Eq.~\eqref{eq:betapostny} is not written in the most compact form
 in order to emphasize that $\yn$, the posterior expectation of $p$,
 is a weighted average of the prior expectation $\yz$ and $s/n$ (the fraction of successes in the data),
 with the weights $\nz$ and $n$, respectively.
@@ -232,103 +242,76 @@ and gives a common structure to all conjugate priors constructed in this way.
 
 For the construction, we will consider distributions of i.i.d.\ samples $\vec{x} = (x_1,\ldots,x_n)$ of size $n$ directly.%
 \footnote{\label{foot:dataisplural}It would be possible, and indeed is often done in the literature,
-to consider a single observation $x$ in \eqref{eq:expofam-sampledens} only,
+to consider a single observation $x$ in Eq.~\eqref{eq:expofam-sampledens} only,
 as the conjugacy property does not depend on the sample size.
 However, we find our version with $n$-dimensional i.i.d.\ sample $\vec{x}$
 more appropriate.} %, as `data is plural' (kaplan?).}
 With the Binomial distribution, we did so indirectly only:
-The $\bin(n,p)$ distribution for $S$ results from $n$ independent trials with sucess probability $p$ each.
+The $\bin(n,p)$ distribution for $S$ results from $n$ independent trials with success probability $p$ each.
 Encoding success as $x_i=1$ and failure as $x_i=0$ and collecting the $n$ results in a vector $\vec{x}$,
 we get $s =\sum_{i=1}^n x_i$.
 It turns out that the sample distribution depends on $\vec{x}$ only through $s$:
 \begin{align}
-f(\vec{x} \mid p) &= P(\vec{X} = \vec{x}) = \prod_{i=1}^n p^{x_i} (1-p)^{1-x_i} = p^s (1-p)^{n-s}\,,
+f(\vec{x} \mid p) &= \prod_{i=1}^n p^{x_i} (1-p)^{1-x_i} \nonumber\\
+ &= p^{\sum_{i=1}^n x_i} (1-p)^{\sum_{i=1}^n (1-x_i)} = p^s (1-p)^{n-s}\,,
 \end{align}
 so $s$ summarizes the sample $\vec{x}$ without changing the pmf.
 Such a summary function of a sample $\vec{x}$ is called \emph{a sufficient statistic of $\vec{x}$}.%
-\footnote{There are $\binom{n}{s}$ 0/1 vectors $\vec{x}$ with $s$ 1's, leading to the Binomial pmf \eqref{eq:binompmf}.
+\footnote{There are $\binom{n}{s}$ 0/1 vectors $\vec{x}$ with $s$ 1's, leading to the Binomial pmf Eq.~\eqref{eq:binompmf}.
 For a Bayesian analysis, such factors that do not depend on the parameter of interest do not matter.
-This is one of the central distinctions between Bayesian and Frequentist methods.}
+This is one of the central differences between Bayesian and Frequentist methods.}
 
-A sample distribution is said to belong to the \emph{canonical exponential family}
+The construction has two steps.
+We first rewrite the sample distribution in a specific form to identify certain ingredients,
+and then construct the conjugate prior based on these ingredients.
+We will cover sampling distributions with only one parameter here;
+you can find the formulation for exponential family distributions with more than one parameter in Appendix~\ref{sec:q-paramexpofam}.
+%The specific form is called \emph{canonical exponential family};
+
+For step~1, a sample distribution is said to belong to the \emph{canonical exponential family}
 if its density or mass function satisfies the decomposition
 \begin{align}
-f(\vec{x} \mid \theta) &= a(\vec{x})\exp\big\{\langle \psi, \tau(\vec{x}) \rangle - n \mbf{b}(\psi)\big\}\,.
+f(\vec{x} \mid \theta) &= a(\vec{x})\exp\big\{ \psi \cdot \tau(\vec{x}) - n \mbf{b}(\psi)\big\}\,.
 \label{eq:expofam-sampledens}
 \end{align}
-The ingredients of the decomposition are:
+The ingredients of this decomposition are:
 \begin{itemize}
-\item $\psi \in \Psi \subset \reals^q$, a transformation of the (possibly vectorial) parameter $\theta \in \Theta$,
+\item $\psi \in \Psi \subset \reals$, a transformation of the distribution parameter $\theta \in \Theta$,
 called the \emph{natural parameter} of the canonical exponential family;
-\item $\mbf{b}(\psi)$, a scalar function of $\psi$ (or, in turn, of $\theta$);
-\item $a(\vec{x})$, a scalar function of $\vec{x}$;
-\item $\tau(\vec{x})$, a sufficient statistic of the sample $\vec{x}$ which has the same dimension as $\psi$.
+\item $\tau(\vec{x})$, a sufficient statistic of the sample $\vec{x}$.
 It holds that $\tau(\vec{x}) = \sum_{i=1}^n \tau^*(x_i)$,
-where $\tau^*(x_i) \in \mathcal{T} \subset \reals^q$.
-\item $\langle\cdot, \cdot\rangle$ denotes the scalar product,
-i.e., for $u, v \in \reals^q$ is $\langle u, v\rangle = \sum_{j=1}^q u_j \cdot v_j$.
+where $\tau^*(x_i) \in \mathcal{T} \subset \reals$;
+\item $\mbf{b}(\psi)$, some function of $\psi$ (or, in turn, of $\theta$);
+\item $a(\vec{x})$, some function of $\vec{x}$.
 \end{itemize}
-In this exercise, we will only consider one-parametric exponential family distributions,
-such that $q=1$ and $\langle \psi, \tau(\vec{x}) \rangle = \psi \cdot \tau(\vec{x})$.
-
-From these ingredients, a conjugate prior on $\psi$ can be constructed as
-\begin{align}
-p(\psi \mid \nz, \yz) \dd\psi
- &\propto \exp\Big\{ \nz \Big[ \langle \yz, \psi \rangle - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,,
-\label{eq:canonicalprior}
-\end{align}
-where $\nz > 0$ and $\yz \in \mathcal{T}$ are the parameters by which a certain prior can be specified.%
-\footnote{Actually, the domain of $\yz$ is $\mathcal{Y}$, defined as the interior of the convex hull of $\mathcal{T}$;
-these intricacies do not matter in this exercise however.}
-We will refer to priors of the form~\eqref{eq:canonicalprior} as \emph{canonically constructed priors}.
-Note that \eqref{eq:canonicalprior} is a distribution over the natural parameter $\psi$ and not over the usual parameter $\theta$.
-When $\psi \neq \theta$ it can be useful to transform the density over $\psi$ to a density over $\theta$.
-
-The prior parameters $\nz$ and $\yz$ are updated to their posterior values $\nn$ and $\yn$ by
-\begin{align}\label{eq:canonicalupdate}
-\nn &= \nz + n\,, &
-\yn &= \frac{\nz}{\nz + n} \cdot \yz + \frac{n}{\nz + n} \cdot \frac{\tau(\vec{x})}{n}\,,
-\end{align}
-and the posterior can be written as
-\begin{align}\label{eq:canonicalposterior}
-p(\psi \mid \vec{x}, \nz, \yz)
- &= p(\psi \mid \nn, \yn) \nonumber\\
- &\propto \exp\Big\{ \nn \Big[ \langle \yn, \psi \rangle - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,.
-\end{align}
-In this setting, $\yz$ and $\yn$ can be seen as the parameter describing the main characteristics of the prior and the posterior,
-and thus we will call them \emph{main prior} and \emph{main posterior parameter}, respectively.
-$\yz$ can also be understood as a prior guess for the mean sufficient statistic $\ttau(\vec{x}) := \tau(\vec{x})/n$.%
-\footnote{This is because $\E[\ttau(\vec{x}) \mid \psi] = \nabla\mbf{b}(\psi)$,
-where in turn $\E[\nabla\mbf{b}(\psi) \mid \nz, \yz] = \yz$, see \textcite[Prop.~5.7, p.~275]{2000:bernardosmith}.
-Nevermind.}
-Here, $\yn$ is a weighted average of this prior guess $\yz$ and the sample `mean' $\ttau(\vec{x})$,
-with weights $\nz$ and $n$, respectively.
-Again, $\nz$ can be seen as ``prior strength'' or ``pseudocount'',
-reflecting the weight one gives to the prior as compared to the sample size $n$.
-
-\begin{myex}
-Confirm \eqref{eq:canonicalupdate},
-the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$,
-for one-parametric exponential family distributions.
-(Hint: Use the last expression in \eqref{eq:bayesrule}
-and consider only the terms related to $\psi$ for the posterior.)
-\end{myex}
-
-
-\section{Some canonically constructed conjugate priors}
-
-This looks all suspiciously similar to the reparametrised Beta distribution above.
-Indeed, the $\be(\nz,\yz)$ is the canonically constructed prior to the Binomial distribution:
-The pmf \eqref{eq:binompmf} can be rewritten as follows:
+Let us do the decomposition for the Binomial distribution before we go to the second step.
+The Binomial pmf from Eq.~\eqref{eq:binompmf} can be rewritten as follows:
 \begin{align}
 f(s\mid p)
  &= {n \choose s} p^s (1-p)^{n-s} \\
  &= {n \choose s} \exp\Big\{ \log\Big(\frac{p}{1-p}\Big) s - n \big(-\log(1-p)\big) \Big\} \,.
 %\label{}
 \end{align}
-We have thus $\psi = \log(p/(1-p))$, $\mbf{b}(\psi) = -\log(1-p)$, and $\tau(\vec{x}) = s$.
+We have thus $\psi = \log(p/(1-p))$, $\tau(\vec{x}) = s$, $\mbf{b}(\psi) = -\log(1-p)$, and $a(\vec{x}) = {n \choose s}$.
 The function $\log(p/(1-p))$ is known as the \emph{logit}, denoted by $\logit(p)$.
-Constructing the prior from these ingredients leads to
+
+In step~2, a conjugate prior on $\psi$ can be constructed from the ingredients identified in step~1 by
+\begin{align}
+p(\psi \mid \nz, \yz) \dd\psi
+ &\propto \exp\Big\{ \nz \Big[ \yz \cdot \psi - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,,
+\label{eq:canonicalprior}
+\end{align}
+where $\nz > 0$ and $\yz \in \reals$ are the parameters by which a certain prior can be specified.%
+\footnote{Actually, the domain of $\yz$ is $\mathcal{Y}$, defined as the interior of the convex hull of $\mathcal{T}$;
+these intricacies do not matter in this exercise however.}
+We will refer to priors of the form~Eq.~\eqref{eq:canonicalprior} as \emph{canonically constructed priors}.
+Note that Eq.~\eqref{eq:canonicalprior} provides a distribution over the natural parameter $\psi$ and not over the usual parameter $\theta$.
+When $\psi \neq \theta$ it can be useful to transform the density over $\psi$ to a density over $\theta$.
+
+%This looks all suspiciously similar to the reparametrised Beta distribution above.
+Continuing our example, it turn out that
+the $\be(\nz,\yz)$ is the canonically constructed prior to the Binomial distribution.
+Constructing the prior from the ingredients $\psi = \log(p/(1-p))$, $\tau(\vec{x}) = s$, and $\mbf{b}(\psi) = -\log(1-p)$ leads to
 \begin{align}
 f\big(\psi \mid \nz, \yz\big) \dd\psi %\dd\log\big(\frac{\theta}{1-\theta}\big)
  &\propto \exp\Big\{ \nz \Big[ \yz \log\Big(\frac{p}{1-p}\Big) + \log(1-p) \Big] \Big\} \dd\psi\,.
@@ -349,7 +332,38 @@ and so we get
  &\propto \exp\Big\{ \nz\yz\log(p) + \big(\nz - \nz\yz\log(1-p)\big)\Big\} \frac{1}{p(1-p)}\dd p\\
  &= p^{\nz\yz - 1} (1-p)^{\nz(1-\yz) - 1} \dd p\,.
 \end{align}
-This is indeed the Beta distribution \eqref{eq:betadensny}.%with parameters $\nz\yz$ and $\nz(1-\yz)$.
+This is indeed the Beta distribution from Eq.~\eqref{eq:betadensny}.%with parameters $\nz\yz$ and $\nz(1-\yz)$.
+
+For all canonically constructed priors,
+the prior parameters $\nz$ and $\yz$ are updated to their posterior values $\nn$ and $\yn$ by
+\begin{align}\label{eq:canonicalupdate}
+\nn &= \nz + n\,, &
+\yn &= \frac{\nz}{\nz + n} \cdot \yz + \frac{n}{\nz + n} \cdot \frac{\tau(\vec{x})}{n}\,,
+\end{align}
+and the posterior can be written as
+\begin{align}\label{eq:canonicalposterior}
+p(\psi \mid \vec{x}, \nz, \yz)
+ &= p(\psi \mid \nn, \yn) \nonumber\\
+ &\propto \exp\Big\{ \nn \Big[ \langle \yn, \psi \rangle - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,.
+\end{align}
+Usually, $\yz$ and $\yn$ can be seen as the parameter describing the main characteristics of the prior and the posterior,
+and thus we will call them \emph{main prior} and \emph{main posterior parameter}, respectively.%
+\footnote{Remember, for the Beta distribution, $\yz$ is the expected success probability $p$.}
+$\yz$ can also be understood as a prior guess for the mean sufficient statistic $\ttau(\vec{x}) := \tau(\vec{x})/n$. %
+%\footnote{This is because $\E[\ttau(\vec{x}) \mid \psi] = \nabla\mbf{b}(\psi)$,
+%where in turn $\E[\nabla\mbf{b}(\psi) \mid \nz, \yz] = \yz$, see \textcite[Prop.~5.7, p.~275]{2000:bernardosmith}.
+%Nevermind.}
+For all constructed priors, $\yn$ is a weighted average of this prior guess $\yz$ and the sample `mean' $\ttau(\vec{x})$,
+with weights $\nz$ and $n$, respectively;
+therefore, $\nz$ can be seen as ``prior strength'' or ``pseudocount'',
+reflecting the weight one gives to the prior as compared to the sample size $n$.
+\begin{myex}
+Confirm Eq.~\eqref{eq:canonicalupdate},
+the equations for updating $\nz$ to $\nn$ and $\yz$ to $\yn$,
+for one-parametric exponential family distributions.
+(Hint: Use the last expression in Eq.~\eqref{eq:bayesrule}
+and consider only the terms related to $\psi$ for the posterior.)
+\end{myex}
 
 \begin{myex}
 Construct the canonical conjugate prior to a sample distribution of your choice.
@@ -358,16 +372,17 @@ This works only for distributions forming a canonical exponential family!
 You can try, e.g., the Normal (Gaussian) distribution with fixed variance $\sigma^2_0$
 or, if you want to avoid a density transformation, the Normal distribution with fixed variance~$1$.%
 \footnote{You can find the solution for $\vec{X} \stackrel{\text{i.i.d}}{\sim} \norm(\mu, \sigma^2_0)$
-at \textcite[pp.~14f]{2013:diss-gw}.
-Table~1 in \textcite{2005:quaeghebeurcooman} gives $\psi$, $\tau^*(x_i)$, $a(x)$ and $\mbf{b}(\psi)$
+%at \textcite[pp.~14f]{2013:diss-gw}.
+in Appendix~\ref{sec:scalednormalconstruction}.
+Furthermore, Table~1 in \textcite{2005:quaeghebeurcooman} gives $\psi$, $\tau^*(x_i)$, $a(x)$ and $\mbf{b}(\psi)$
 for the most common sample distributions that form a canonical exponential family.}
 \end{myex}
 
 
 \section{Prior-data conflict}
 
-As discussed in the talk, the weighted average structure for $\yn$ in \eqref{eq:canonicalupdate} is intuitive,
-but with it comes the problem of prior-data conflict.
+As discussed in the talk, the weighted average structure for $\yn$ in Eq.~\eqref{eq:canonicalupdate} is intuitive,
+but with it comes the problematic behaviour in case of prior-data conflict.
 In most parametric models, the spread of the posterior does not systematically depend
 on how far the prior guess $\yz$ diverges from the mean sufficient statistic $\tilde{\tau}(\vec{x})$.
 Then, conflict between prior assumptions and information from data is just averaged out,
@@ -376,7 +391,7 @@ being more pointed around $\yn$ than the prior in spite of the conflict.
 
 \begin{myex}
 Write the functions \code{nn(n0, n)} and \code{yn(n0, y0, s, n)}
-implementing \eqref{eq:betapostny}, the update step for the Beta prior.
+implementing Eq.~\eqref{eq:betapostny}, the update step for the Beta prior.
 Plot prior and posterior densities for different choices of \code{n0, y0, s, n}
 to see the effect (or the lack of it) of prior-data conflict on the posterior,
 using your code from Exercise~\ref{ex:dbetany}.
@@ -388,7 +403,7 @@ and compare the posterior for \code{s = 12, n = 16} and for \code{s = 0, n = 16}
 \section{Sets of conjugate priors}
 
 Modelling prior information with sets of conjugate priors
-retains the tractability of conjugate analysis and gives prior-data conflict sensitivity.
+retains the tractability of conjugate analysis and ensures prior-data conflict sensitivity.
 It also allows to express prior knowledge more cautiously, or partial prior knowledge,
 and generally makes it possible to express the precision of probability statements encoded in the prior.
 The resulting imprecise/interval probability models can be seen as systematic sensitivity analysis,
@@ -432,13 +447,14 @@ to plot a second parameter set in the same plot window, use \code{add=TRUE}.
 \item Can you explain why the two $\PN$'s have different shapes,
 and how their respective shapes come about?
 (Hint: Each point in the upper bound of $\PN$ is a weighted average of $\yzu$ and $\tau(\vec{x})/n$.)
-\item Vary the $\yz$ interval, the $\nz$ interval, the sample statistic $\tau(\vec{x})$, the sample size $n$,
-and observe the effect each has on $\PN$.
-What happens to $\PZ$ when $\nz \to \infty$ with $\ttau(\vec{x}) = \tau(\vec{x})/n$ constant?
+\item Vary the length of the $\yz$ interval and the $\nz$ interval,
+vary the sample statistic $\tau(\vec{x})$ and the sample size $n$.
+What is the effect on $\PN$ for each change?
+E.g., what happens to the range of $\yn$ values when the $\yz$ interval gets larger?
+What happens to $\PZ$ when $n \to \infty$ with $\ttau(\vec{x}) = \tau(\vec{x})/n$ constant?
 %(sets shrink towards $\ttau(\vec{x})$ for $n \to \infty$, \dots, as in \parencite[\S 3.1.2]{2013:diss-gw}).
 \end{enumerate}
 \end{myex}
-
 A model with $\PZ = \nz \times [\yzl, \yzu]$ corresponds to a vertical slice of the plotted sets $\PZ$.
 The posterior parameter set is a vertical slice as well and can be expressed as $\PN = \nn \times [\ynl, \ynu]$,
 where $\ynl$ and $\ynu$ result from updating $\yzl$ and $\yzu$, respectively:
@@ -452,7 +468,8 @@ The posterior imprecision in the $y$ dimension, denoted by $\Delta_y(\PN)$, is
 \Delta_y(\PN) &= \ynu - \ynl = \frac{\nz (\yzu - \yzl)}{\nz +n}\,.
 \end{align}
 \begin{myex}
-Do you see from \eqref{eq:deltay} why models with $\PZ = \nz \times [\yzl, \yzu]$ are insensitive to prior-data conflict?
+Do you see from Eq.~\eqref{eq:deltay} why models with $\PZ = \nz \times [\yzl, \yzu]$ are insensitive to prior-data conflict?
+%You can define such models with the \code{LuckModel()} function by giving a single value to the \code{n0} argument.
 \end{myex}
 %***$\ynl$, $\ynu$ formulas. $\ynu-\ynl$ formula? \parencite[p.~65]{2013:diss-gw}
 When $\PZ = [\nzl, \nzu] \times [\yzl, \yzu]$, things are different, as you have seen.
@@ -466,25 +483,132 @@ Then, the lower and upper bound in the $y$ dimension are given by
                                        \dfrac{\nzl}{\nzl + n}\,\yzu + \dfrac{n}{\nzl + n}\,\ttaux & \ttaux >    \yzu \end{cases}\,.
 \end{align}
 \begin{myex}
-Which cases in \eqref{eq:ynl} and \eqref{eq:ynu} correspond to prior-data conflict?
+Which cases in Eq.~\eqref{eq:ynl} and Eq.~\eqref{eq:ynu} correspond to prior-data conflict?
 What do they have in common, and how does this link to what you saw in the $\PN$ plots?
 \end{myex}
 The posterior imprecision in the $y$ dimension can be expressed by
 \begin{align}
-\Delta_y(\PN) &= \frac{\nzu (\yzu - \yzl)}{\nzu + n}\\
+\Delta_y(\PN) &= \frac{\nzu (\yzu - \yzl)}{\nzu + n} \nonumber\\
               &\qquad + \inf_{\yz \in [\yzl,\yzu]} |\ttaux - \yz| \frac{n (\nzu - \nzl)}{(\nzl + n)(\nzu + n)}\,.
+\label{eq:deltay2}
 \end{align}
 Note that the expression $\inf_{\yz \in [\yzl,\yzu]} |\ttaux - \yz| = 0$ when $\ttaux \in [\yzl, \yzu]$,
 otherwise it gives the distance of $\ttaux$ to the $\yz$ interval.
+\begin{myex}
+How does the shape of $\PN$ reflect Eq.~\eqref{eq:deltay2} when $\ttaux \in [\yzl, \yzu]$?
+%When $\ttaux \not\in [\yzl, \yzu]$, 
+\end{myex}
 
 
-\section{Sets of conjugate priors for data $X \sim \norm(\mu,1)$}
+\section{Sets of conjugate priors for scaled normal data}
+
+The \emph{scaled normal distribution}, a normal distribution with variance $1$,
+is implemented in the \texttt{luck} package.
+For $X \sim \norm(\mu,1)$, the canonically constructed prior is $\mu \sim \norm(\yz, 1/\nz)$,
+see Appendix~\ref{sec:scalednormalconstruction} with $\sigma^2_0=1$
+
 
 ***plot sets of prior/posterior cdfs, union of HPD intervals.
 
 ***write own subclasses, make own analyses.
 
+\appendix
 
+\section{The Normal distribution with known variance as canonically constructed conjugate prior}
+\label{sec:scalednormalconstruction}
+
+Consider the normal or Gaussian distribution with known variance $\sigma^2_0$.
+The pdf for $n$ independend samples $\vec{x} = (x_1,\ldots,x_n)$
+can be written as
+\begin{align}
+\label{eq:normaldens}
+f(\vec{x}\mid\mu)
+ &= \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma_0^2}} \exp\Big\{ -\frac{1}{2\sigma_0^2} (x_{i} - \mu)^2 \Big\} \nonumber\\
+ &= (2\pi\sigma_0^2)^{-\frac{n}{2}}\exp\Big\{ -\frac{1}{2\sigma_0^2} \sum_{i=1}^n (x_{i} - \mu)^2 \Big\} \\
+ &= (2\pi\sigma_0^2)^{-\frac{n}{2}}
+    \exp\Big\{ -\frac{1}{2\sigma_0^2} \Big[ \sum_{i=1}^n x_{i}^2 -2\mu\sum_{i=1}^n x_{i} + n\mu^2 \Big] \Big\} \nonumber\\
+ &= (2\pi\sigma_0^2)^{-\frac{n}{2}}
+    \exp\Big\{ -\frac{1}{2\sigma_0^2} \sum_{i=1}^n x_{i}^2 +\frac{\mu}{\sigma_0^2} \sum_{i=1}^n x_{i} - \frac{n \mu^2}{2\sigma_0^2} \Big\}\,.
+\end{align}
+So we have here $\psi = \frac{\mu}{\sigma_0^2}$, $\mbf{b}(\psi) = \frac{\mu^2}{2\sigma_0^2}$, and $\tau(\vec{x}) = \sum_{i=1}^n x_i$.
+From these ingredients, a conjugate prior can be constructed with \eqref{eq:canonicalprior}, leading to
+\begin{align}
+p\Big(\frac{\mu}{\sigma_0^2} \mid \nz, \yz\Big) \dd\frac{\mu}{\sigma_0^2}
+ &\propto \exp\Big\{ \nz \Big(\yz \frac{\mu}{\sigma_0^2} - \frac{\mu^2}{2\sigma_0^2} \Big) \Big\} \dd\frac{\mu}{\sigma_0^2}\,.
+\end{align}
+This prior, transformed to the parameter of interest $\mu$ and with the square completed,
+\begin{align}
+p(\mu \mid \nz, \yz) \dd\mu
+ &\propto \frac{1}{\sigma_0^2} \exp\Big\{ -\frac{\nz}{2\sigma_0^2} \Big(-2\mu\yz + \mu^2\Big\} \dd\mu \nonumber\\
+ &\propto \exp\Big\{ -\frac{\nz}{2\sigma_0^2} (\mu - \yz)^2 \Big\} \dd\mu\,,
+\end{align}
+is a normal distribution with mean $\yz$ and variance $\frac{\sigma_0^2}{\nz}$,
+i.e.\ $\mu \sim \norm(\yz, \frac{\sigma_0^2}{\nz})$.
+With \eqref{eq:canonicalupdate}, the parameters for the posterior distribution are
+\begin{align}
+\yn &= \E[\mu\mid\nn, \yn] = \frac{\nz}{\nz + n} \cdot \yz + \frac{n}{\nz + n} \cdot \bar{x} \label{eq:normalposte}\\
+\frac{\sigma_0^2}{\nn} &= \V(\mu\mid\nn, \yn) = \frac{\sigma_0^2}{\nz + n}\,. \label{eq:normalpostvar}
+\end{align}
+The posterior expectation of $\mu$ thus is a weighted average of the prior expectation $\yz$ and the sample mean $\bar{x}$,
+with weights $\nz$ and $n$, respectively.
+The effect of the update step on the variance is that it decreases by the factor $\nz/(\nz+n)$.
+
+
+\section{Canonical exponential families\\ with $q$ parameters}
+\label{sec:q-paramexpofam}
+
+A sample distribution is said to belong to the \emph{$q$-parametric canonical exponential family}
+if its density or mass function satisfies the decomposition
+\begin{align}
+f(\vec{x} \mid \theta) &= a(\vec{x})\exp\big\{\langle \psi, \tau(\vec{x}) \rangle - n \mbf{b}(\psi)\big\}\,.
+\label{eq:expofam-sampledens-q}
+\end{align}
+The ingredients of the decomposition are:
+\begin{itemize}
+\item $\psi \in \Psi \subset \reals^q$, a transformation of the (vectorial) parameter $\theta \in \Theta$,
+called the \emph{natural parameter} of the canonical exponential family;
+\item $\mbf{b}(\psi)$, a scalar function of $\psi$ (or, in turn, of $\theta$);
+\item $a(\vec{x})$, a scalar function of $\vec{x}$;
+\item $\tau(\vec{x})$, a sufficient statistic of the sample $\vec{x}$ which has dimension $q$ (the same as $\psi$).
+It holds that $\tau(\vec{x}) = \sum_{i=1}^n \tau^*(x_i)$,
+where $\tau^*(x_i) \in \mathcal{T} \subset \reals^q$.
+\item $\langle\cdot, \cdot\rangle$ denotes the scalar product,
+i.e., for $u, v \in \reals^q$ is $\langle u, v\rangle = \sum_{j=1}^q u_j \cdot v_j$.
+\end{itemize}
+
+From these ingredients, a conjugate prior on $\psi$ can be constructed as
+\begin{align}
+p(\psi \mid \nz, \yz) \dd\psi
+ &\propto \exp\Big\{ \nz \Big[ \langle \yz, \psi \rangle - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,,
+\label{eq:canonicalprior-q}
+\end{align}
+where $\nz > 0$ and $\yz \in \mathcal{Y}$ are the parameters by which a certain prior can be specified.
+$\mathcal{Y}$, the domain of $\yz$, is defined as the interior of the convex hull of $\mathcal{T}$.
+We refer to priors of the form in Eq.~\eqref{eq:canonicalprior-q} as \emph{canonically constructed priors}.
+Note that Eq.~\eqref{eq:canonicalprior-q} provides a distribution over the natural parameter $\psi$ and not over the usual parameter $\theta$.
+When $\psi \neq \theta$ it can be useful to transform the density over $\psi$ to a density over $\theta$.
+
+The prior parameters $\nz$ and $\yz_j$, $j=1,\ldots,q$, are updated to their posterior values $\nn$ and $\yn_j$ by
+\begin{align}\label{eq:canonicalupdate-q}
+\nn   &= \nz + n\,, &
+\yn_j &= \frac{\nz}{\nz + n} \cdot \yz_j + \frac{n}{\nz + n} \cdot \frac{\tau(\vec{x})_j}{n}\,,
+\end{align}
+and the posterior can be written as
+\begin{align}
+\label{eq:canonicalposterior-q}
+p(\psi \mid \vec{x}, \nz, \yz)
+ &= p(\psi \mid \nn, \yn) \nonumber\\
+ &\propto \exp\Big\{ \nn \Big[ \langle \yn, \psi \rangle - \mbf{b}(\psi) \Big] \Big\} \dd\psi\,.
+\end{align}
+$\yz$ and $\yn$ can be seen as the parameter vectors describing the main characteristics of the prior and the posterior,
+and thus we will call them \emph{main prior} and \emph{main posterior parameter}, respectively.
+$\yz$ can also be understood as a prior guess for the mean sufficient statistic $\ttau(\vec{x}) := \tau(\vec{x})/n$.%
+\footnote{This is because $\E[\ttau(\vec{x}) \mid \psi] = \nabla\mbf{b}(\psi)$,
+where in turn $\E[\nabla\mbf{b}(\psi) \mid \nz, \yz] = \yz$, see \textcite[Prop.~5.7, p.~275]{2000:bernardosmith}.}
+$\yn_j$ is a weighted average of this prior guess $\yz_j$ and the sample `mean' $\ttau(\vec{x})_j$,
+with weights $\nz$ and $n$, respectively.
+$\nz$ can be seen as ``prior strength'' or ``pseudocount'',
+reflecting the weight one gives to the prior as compared to the sample size $n$.
 
 
 \printbibliography
