@@ -505,8 +505,9 @@ How does the shape of $\PN$ reflect Eq.~\eqref{eq:deltay2} when $\ttaux \in [\yz
 
 The prior for the \emph{scaled normal distribution}, a normal distribution with variance $1$,
 is implemented in the \texttt{luck} package.
-For $X \sim \norm(\mu,1)$, the canonically constructed prior is $\mu \sim \norm(\yz, 1/\nz)$,
-for a derivation see Appendix~\ref{sec:scalednormalconstruction} and set $\sigma^2_0=1$.
+For $X \sim \norm(\mu,1)$, the canonically constructed prior is $\mu \sim \norm(\yz, 1/\nz)$;
+the sufficient statistic is $\tau(\vec{x}) = \sum_{i=1}^n x_i$.
+For a derivation, see Appendix~\ref{sec:scalednormalconstruction} below and set $\sigma^2_0=1$.
 \begin{myex}
 Use the functions \code{ScaledNormalLuckModel()} and \code{ScaledNormalData()}
 to create a \code{LuckModel} for scaled normal data.
@@ -515,10 +516,11 @@ and observe how this changes depending on $\ttaux = \bar{x}$ being inside our ou
 How are the ranges for $\nz$ and $\yz$ reflected in the set of cdfs?
 \end{myex}
 The Bayesian equivalent to frequentist confidence intervals are credible intervals.
-With the posterior being a distribution over the parameter of interest $\theta$,
-a $95$\% credible interval is an interval for $\theta$ covering a probability weight of $\gamma = 95$\% according to the posterior.
-It can be obtained, e.g., as the interval from the $2.5$\% quantile to the $97.5$\% quantile of the posterior density.
-Highest density intervals are credible intervals that encompass the $\theta$ values with the highest cdf values.
+%With the posterior being a distribution over the parameter of interest $\theta$,
+A $95$\% posterior credible interval is an interval for $\theta$
+covering a probability weight of $\gamma = 95$\% according to the posterior over $\theta$.
+It can be obtained, e.g., as the interval from the $2.5$\% quantile to the $97.5$\% quantile of the posterior.
+Highest density intervals are credible intervals that consist of the $\theta$ values with the highest cdf values.
 Often denoted as HPD (for highest posterior density) intervals, 
 they are more difficult to obtain than quantile-based credible intervals,
 but give the shortest interval among all level $\gamma$ intervals when the distribution is unimodal.
@@ -526,7 +528,7 @@ For sets of priors, we can consider the union of all highest density intervals c
 and likewise for the set of posteriors.
 \begin{myex}
 Calculate prior and posterior union of highest density intervals using \code{unionHdi()}
-for your \code{ScaledNormalLuckModel}.
+for a \code{ScaledNormalLuckModel}.
 Compare its length when prior-data conflict is or is not present. 
 \end{myex}
 %***plot sets of prior/posterior cdfs, union of HPD intervals.
@@ -539,7 +541,7 @@ Write your own subclasses to implement the conjugate prior to a sample distribut
 Take the code files \verb+01-01_ScaledNormalData.r+ and \verb+01-02_ScaledNormal.r+ as a blueprint.
 You can find these files in the \code{R} folder of the package sources.
 %It is not neccessary to write such elaborated
-The constructor functions can be much simpler than those in the files which are written to accommodate all kinds of arguments.
+The constructor functions can be much simpler than those in the files which are written to accommodate all kinds of inputs.
 %Bayesian analysis with sets of conjugate priors
 \end{myex}
 
@@ -549,7 +551,7 @@ The constructor functions can be much simpler than those in the files which are 
 \label{sec:scalednormalconstruction}
 
 Consider the normal or Gaussian distribution with known variance $\sigma^2_0$.
-The pdf for $n$ independend samples $\vec{x} = (x_1,\ldots,x_n)$
+The pdf for $n$ independent samples $\vec{x} = (x_1,\ldots,x_n)$
 can be written as
 \begin{align}
 \label{eq:normaldens}
@@ -586,7 +588,7 @@ The effect of the update step on the variance is that it decreases by the factor
 for any sample of size $n$.
 
 
-\section{Canonical exponential families\\ with $q$ parameters}
+\section{Canonical exponential families with more than one parameter}
 \label{sec:q-paramexpofam}
 
 A sample distribution is said to belong to the \emph{$q$-parametric canonical exponential family}
