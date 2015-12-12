@@ -1,5 +1,9 @@
 course/.Rhistory
 course/.Rproj.user
+course/.RData
+course/solutions-concordance.tex
+course/solutions.tex
+course/solutions.R
 *~
 *.aux
 *blx.bib
@@ -9,5 +13,6 @@ course/.Rproj.user
 *.out
 *.pdf
 *.run.xml
+*.synctex.gz
 *.toc
 .Rproj.user
