@@ -10,9 +10,11 @@ course/solutions.R
 *.bbl
 *.blg
 *.log
+*.nav
 *.out
 *.pdf
 *.run.xml
+*.snm
 *.synctex.gz
 *.toc
 .Rproj.user
