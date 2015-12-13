@@ -133,6 +133,7 @@
 %\def\rot#1{{\color{red}#1}}
 %\def\gruen#1{{\color{blue}#1}}
 
+\newcommand{\x}{\vec{x}}
 
 \def\tnow{t_\text{now}}
 \def\tpnow{t^+_\text{now}}
@@ -240,13 +241,13 @@ where $s$ = number of successes in the $n$ observed trials}
 }
 
 \frame{
-\frametitle{Reparametrisation of the Beta}
+\frametitle{Reparametrisation of the Beta distribution}
 \uncover<1->{\play\ reparametrisation helps to understand effect of prior-data conflict:\\}
 \begin{tikzpicture}
 [pfeil/.style={-latex', line width=1mm, color=tuered, shorten <=1mm},
  cyanrand/.style={rounded corners, text centered, draw=tuecyan!50, inner sep=1mm, line width=0.7mm},
  redbrace/.style={draw=tuered, decoration=brace, decorate, line width=0.8mm},
- redbox/.style={text centered, draw=tuered, inner sep=1.5mm, line width=1mm}]
+ redbox/.style={text centered, draw=tuered, inner sep=1.5mm, line width=1mm, minimum width=0.75\textwidth}]
 \uncover<1->{%
 \node at (0,0.2) {\parbox[c]{\textwidth}{%
 \begin{align*}
@@ -280,14 +281,289 @@ where $s$ = number of successes in the $n$ observed trials}
 \draw [pfeil] (nz.north)      to [out=90,in=270] (-4.0,-0.65);
 \draw [pfeil] (nz.north west) to [out=95,in=240] (-5.2, 0.5);}
 \uncover<6->{%
-\node[redbox] at (0,-2.8) {$\E[p \mid s]$ is a weighted average of $\E[p]$ and $\hat{p}$!};}
+\node[redbox] at (0,-2.8) {$\E[p \mid s] = \ynr$ is a weighted average of $\E[p]$ and $\hat{p}$!};}
 \uncover<7->{%
-\node[redbox] at (0,-4.0) {$\V[p \mid s] = \dfrac{\ynr (1-\ynr)}{\nng + 1}$ and so decreases whatever $s$!};}
+\node[redbox] at (0,-4.0) {$\V[p \mid s] = \dfrac{\ynr (1-\ynr)}{\nng + 1}$ decreases for any $s$!};}
 \end{tikzpicture}
 }
 
+\frame{\frametitle{Beta-Binomial Model (BBM)}
 
-\begin{frame}{References}
+\hspace*{-12ex}
+\begin{columns}%[T]
+\begin{column}{0.55\textwidth}
+\begin{tikzpicture}
+\pgftransformscale{0.025}
+\uncover<1>{
+\input{tikzdevice/precise01.tex}
+}
+\uncover<2>{
+\input{tikzdevice/precise02.tex}
+\draw[-stealth,very thick] (110,175) -- (220,175) node [above,midway] {12 out of 16};
+}
+\uncover<3->{
+\input{tikzdevice/precise03.tex}
+\draw[-stealth,very thick,gray] (110,175) -- (220,175) node [above,midway,gray] {12 out of 16};
+}
+\uncover<4->{
+\draw[-stealth,very thick] (110,102) -- (220,167) node [above,midway,sloped] {16 out of 16};
+}
+\end{tikzpicture}
+\end{column}
+\begin{column}{0.45\textwidth}
+\uncover<1->{%
+\begin{block}{no conflict:}
+prior $\nzg = 8$, $\yzr = 0.75$\\
+data $s/n = 12/16 = 0.75$
+\end{block}
+} %
+\uncover<2->{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangledown$}\vspace*{-1.5ex}
+\begin{block}{}
+$\nng = 24$, $\ynr = 0.75$
+\end{block}
+} %
+\uncover<4->{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangle$}\vspace*{-1.5ex}
+}
+\uncover<3->{%
+\begin{block}{prior-data conflict:}
+prior $\nzg = 8$, $\yzr = 0.25$\\
+data $s/n = 16/16 = 1$
+\end{block}
+} %
+\uncover<0>{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangledown$}\vspace*{-1.5ex}
+\begin{block}{}
+$\nng \in [20, 24]$, $\ynr \in [0.73, 0.86]$
+\end{block}
+} %
+%\uncover<5->{ %
+%\then\ same predictive prob.\ P!
+%}
+\end{column}
+\end{columns}
+}
+
+\frame{\frametitle{Canonical conjugate priors}
+
+\uncover<1->{%
+Averaging property holds \alert{\emph{for all conjugate models}} (!)
+\begin{block}%
+{$(x_1, \ldots, x_n) = \x \stackrel{iid}{\sim}$ canonical exponential family} %(Bernardo and Smith, 1994)
+%, i.e.
+%\begin{align*}
+\centering
+$f(\x \mid \theta) \propto \exp\big\{\langle \psib, \tau(\x) \rangle - n \bpsib \big\}
+\qquad \Big[ \psib \text{ transformation of } \theta \Big]$\\[1.5ex]
+%\end{align*}
+(includes Binomial, Multinomial, Normal, Poisson, Exponential, \ldots )%\\[2ex]
+\end{block}}
+\vspace*{-3ex}%
+\begin{align*}
+\uncover<2->{%
+&\text{\play\ conjugate prior:} &
+f(\psib\mid\nzg,\yzr) \hspace*{2ex}
+&\propto \exp\big\{ \nzg \big[\langle \psib, \yzr \rangle - \bpsib\big]\big\} \\}
+\uncover<3->{%
+&\text{\play\ (conjugate) posterior:} &
+f(\psib\mid\nzg,\yzr,\vec{x})
+%p(\psib\mid\nng,\ynr) \hspace*{2ex}
+&\propto \exp\big\{ \nng \big[\langle \psib, \ynr \rangle - \bpsib\big]\big\} }%\quad \mbox{where}
+\end{align*}
+\vspace*{-4ex}%
+\uncover<3->{%
+\begin{align*}
+\mbox{where}\quad \ynr &= \frac{\nzg}{\nzg + n} \cdot \yzr + \frac{n}{\nzg + n} \cdot \frac{\tau(\x)}{n} & &\mbox{and} & \nng &= \nzg + n
+\end{align*}}
+\vspace*{-2ex}%
+\uncover<4->{%
+\begin{itemize}
+\item $\nzg$ determines \alert{spread} and \alert{learning speed}
+\item $\yzr$ = \alert{prior expectation} of $\tau(\x)/n$}
+\end{itemize}
+}
+
+\frame{
+\frametitle{Imprecise / interval probability}
+\begin{itemize}[<+->]
+\item Averaging property holds \alert{\emph{for all conjugate models}} (!)\\
+\cyanalert{Can we mitigate this and still keep tractability?}
+\item Prior $f(p)$ is a collection of probability statements:
+\begin{center}
+$\int_a^b f(p) \dd p = P(a \le p \le b)$\\[1.5ex]
+%Reliability function $R(t)$ is a collection of probability statements:\\
+%$R(t) =$ probability that the system survives past $t$.\\
+%%In the long run, what percentage of components survive past $t$?\\
+\cyanalert{How can we express uncertainty\\ about these probability statements?}
+\end{center}
+\item[\play] \textbf{Add \alert{imprecision} as new modelling dimension:\\
+\alert{Sets of priors} model uncertainty in probability statements\\
+and allow to better model partial or vague information on $p$.}
+\item Separate uncertainty \emph{whithin the model} (probability statements)\\
+from uncertainty \emph{about the model} (how certain about statements) %(which parameters).
+\item Can also be seen as systematic sensitivity analysis\\
+or robust Bayesian approach.
+\end{itemize}
+}
+
+\frame{
+\frametitle{Sets of prior distributions}
+\uncover<1->{%
+\begin{block}{Uncertainty about probability statements}
+\centerline{smaller sets $=$ more precise probability statements}
+\vspace*{1ex}
+\parbox[t]{0.45\textwidth}{\centering \textbf{Lottery A}\\
+                          Number of winning tickets:\\
+                          exactly known as 5 out of 100\\
+                          \play\ $P(\text{win}) = 5/100$}
+\qquad
+\parbox[t]{0.45\textwidth}{\centering \textbf{Lottery B}\\
+                          Number of winning tickets:\\
+                          not exactly known, supposedly\\
+                          between 1 and 7 out of 100\\
+                          \play\ $P(\text{win}) = [1/100,\, 7/100]$}
+\end{block}}
+\uncover<2->{%
+Let parameters $(\nzg, \yzr)$ vary in a set $\PZc$ \play\ set of priors $\MZ$\\[1ex]
+Sets of priors $\to$ sets of posteriors by updating element by element:\\
+GBR \parencite{1991:walley} ensures \emph{coherence} {\small (a consistency property)}\\[1ex]}
+\uncover<3->{%
+Set of posteriors $\MN$ via $\PNc = \big\{(\nng,\ynr) \colon (\nzg,\yzr) \in \PZc \big\}$\\
+Bounds for inferences (point estimate, \ldots) by min/max over $\PZc$.
+%\textcite{2009:WalterAugustin}, \textcite{2013:diss-gw}: $\PZc = [\nzlg, \nzug] \times [\yzlr, \yzur]$\\
+%gives tractability \& meaningful reaction to prior-data conflict:
+%\begin{itemize}
+%\item larger set of posteriors %$\to$ larger intervals
+%\item more imprecise / cautious probability statements
+%\end{itemize}
+}
+}
+
+\frame{\frametitle{Imprecise BBM with $\nz$ fixed}
+%IDM (Walley 1996)\\ Quaghebeur \& de Cooman (2005)
+IDM \parencite{1996:walley::idm}; \textcite{2005:quaeghebeurcooman}
+\hspace*{-12ex}
+\begin{columns}%[T]
+\begin{column}{0.55\textwidth}
+\begin{tikzpicture}
+\pgftransformscale{0.025}
+\uncover<1>{
+\input{tikzdevice/line01.tex}
+}
+\uncover<2>{
+\input{tikzdevice/line02.tex}
+\draw[-stealth,very thick] (110,175) -- (220,175) node [above,midway] {12 out of 16};
+}
+\uncover<3->{
+\input{tikzdevice/line03.tex}
+\draw[-stealth,very thick,gray] (110,175) -- (220,175) node [above,midway,gray] {12 out of 16};
+}
+\uncover<4->{
+\draw[-stealth,very thick] (110,102) -- (220,167) node [above,midway,sloped] {16 out of 16};
+}
+\end{tikzpicture}
+\end{column}
+\begin{column}{0.45\textwidth}
+\uncover<1->{%
+\begin{block}{no conflict:}
+prior $\nzg = 8$, $\yzr \in [0.7, 0.8]$\\
+data $s/n = 12/16 = 0.75$
+\end{block}
+} %
+\uncover<2->{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangledown$}\vspace*{-1.5ex}
+\begin{block}{}
+$\nng = 24$, $\ynr \in [0.73, 0.77]$
+\end{block}
+} %
+\uncover<4->{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangle$}\vspace*{-1.5ex}
+}
+\uncover<3->{%
+\begin{block}{prior data conflict:}
+prior $\nzg = 8$, $\yzr \in [0.2, 0.3]$\\
+data $s/n = 16/16 = 1$
+\end{block}
+} %
+\uncover<0>{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangledown$}\vspace*{-1.5ex}
+\begin{block}{}
+$\nng \in [20, 24]$, $\ynr \in [0.73, 0.86]$
+\end{block}
+} %
+%\uncover<5->{ %
+%\then\ same imprecise predictive prob.\ $[\Pl,\Pu]$!
+%}
+\end{column}
+\end{columns}
+}
+
+\frame{\frametitle{Imprecise BBM with $[\nzl,\nzu]$}
+%Walley (1991, \S 5.4.3)\\ Walter \& Augustin (2009)
+\textcite[\S 5.4.3]{1991:walley}; \textcite{2009:WalterAugustin}; \textcite{2013:diss-gw}
+\hspace*{-12ex}
+\begin{columns}%[T]
+\begin{column}{0.55\textwidth}
+\begin{tikzpicture}
+\pgftransformscale{0.025}
+\uncover<1>{
+\input{tikzdevice/rect01.tex}
+}
+\uncover<2>{
+\input{tikzdevice/rect02.tex}
+\draw[-stealth,very thick] (110,175) -- (193,175) node [above,midway] {12 out of 16};
+}
+\uncover<3>{
+\input{tikzdevice/rect03.tex}
+\draw[-stealth,very thick,gray] (110,175) -- (193,175) node [above,midway,gray] {12 out of 16};
+}
+\uncover<4>{
+\input{tikzdevice/rect04.tex}
+\draw[-stealth,very thick,gray] (110,175) -- (193,175) node [above,midway,gray] {12 out of 16};
+\draw[-stealth,very thick] (110,102) -- (213,180) node [above,midway,sloped] {16 out of 16};
+%\draw[-stealth,very thick, postaction={decorate,decoration={raise=2pt,text along path, %
+%                                       text={16 out of 16}}}] (110,95) .. controls +(right:30) and +(down:30) .. (210,183);
+%\draw[-stealth,very thick] (110,95) .. controls +(right:10) and +(down:10) .. (210,183) node [below,midway,sloped] {16 out of 16};
+}
+\end{tikzpicture}
+\end{column}
+\begin{column}{0.45\textwidth}
+\uncover<1->{%
+\begin{block}{no conflict:}
+prior $\nzg\! \in [4, 8]$, $\yzr\! \in [0.7, 0.8]$\\
+data $s/n = 12/16 = 0.75$
+\end{block}
+} %
+\uncover<2->{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangledown$}\vspace*{-1.5ex}
+\begin{block}{}
+%$\gruen{\nn} \in [20, 24]$,
+\centering $\ynr \in [0.73, 0.77]$
+%\centering ``spotlight'' shape
+\end{block}
+} %
+\uncover<3->{%
+\begin{block}{prior-data conflict:}
+prior $\nzg \in\! [4, 8]$, $\yzr\! \in [0.2, 0.3]$\\
+data $s/n = 16/16 = 1$
+\end{block}
+} %
+\uncover<4->{%
+\vspace*{-1.5ex}\centerline{\color{tueblue} $\blacktriangledown$}\vspace*{-1.5ex}
+\begin{block}{}
+%$\gruen{\nn} \in [20, 24]$,
+\centering $\ynr \in [0.73, 0.86]$
+%\centering ``banana'' shape
+\end{block}
+} %
+\end{column}
+\end{columns}
+}
+
+
+
+\begin{frame}[allowframebreaks]{References}
 %\begin{frame}[allowframebreaks]{References}
 %
 %  \bibliographystyle{plain}
