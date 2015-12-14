@@ -499,7 +499,7 @@ $\nng \in [20, 24]$, $\ynr \in [0.73, 0.86]$
 \end{columns}
 }
 
-\frame{\frametitle{Imprecise BBM with $[\nzl,\nzu]$}
+\frame{\frametitle{Imprecise BBM with $\nz$ interval}
 %Walley (1991, \S 5.4.3)\\ Walter \& Augustin (2009)
 \textcite[\S 5.4.3]{1991:walley}; \textcite{2009:WalterAugustin}; \textcite{2013:diss-gw}
 \hspace*{-12ex}
@@ -561,6 +561,55 @@ data $s/n = 16/16 = 1$
 \end{columns}
 }
 
+\frame{\frametitle{Example: scaled normal data}
+\begin{tikzpicture}
+\uncover<1>{%
+\node (0,0) {\begin{minipage}{0.99\textwidth}%
+\begin{block}{Example: Scaled Normal Data}
+\begin{tabular}{r|lcl}
+Data :           & $\x\mid\mu$        & $\sim$ & $\norm(\mu,1)$\\[0.5ex] %\sigma_0^2)$ \quad ($\sigma_0^2$ known)\\[0.5ex]
+conjugate prior: & $\mu\mid\nzg,\yzr$ & $\sim$ & $\norm(\yzr, 1/\nzg)$  \\[0.5ex]
+\cline{1-4}
+posterior:       & $\mu\mid\nng,\ynr$ & $\sim$ & $\norm(\ynr, 1/\nng)$ \quad ($\tau(\x)/n = \bar{x}$)\rule{0ex}{2.5ex} %& \\[0.5ex]
+\end{tabular}
+\end{block}\vspace*{18ex}\end{minipage}};}
+\uncover<2>{%
+\node (0,0) {%
+\includegraphics[trim = 20mm 20mm 20mm 25mm, clip, width=\textwidth]{jstp-paper_nv_nvar_vertfu01_081128}};}
+\end{tikzpicture}
+}
+
+\begin{frame}[label=othermodels-back]{General model properties}
+\uncover<1->{%
+Good inference properties \hyperlink{othermodels-app}{\small (cf.\ other models based on sets of priors)}}
+\begin{itemize}%[<+->]
+%\note<10>[item]{In contrast to other models based on sets of priors,\\
+%this model is easy to handle and to elicit,\\ and has very favourable inference properties}
+\item<1-> $n \to \infty$\hspace*{0.9ex}%
+%\uncover<2->{\then\ \ $\ynr$ values in $\PNc \to \frac{\tau(\x)}{n}$\hspace*{0.9ex}}%
+%\uncover<3->{\then\ \ `Bayesian consistency'}
+\uncover<2->{\play\ \ $\ynr$ stretch in $\PNc \to 0$\hspace*{0.9ex}}%
+\uncover<3->{\play\ \ precise inferences}
+\note<10>[item]{`Bayesian consistency' just like in usual Bayesian inference}
+\item<4-> larger $\nzg$ \play\ larger $\PNc$ \hspace*{9ex}\play\ more vague inferences
+%\note<10>[item]{larger $\nzg$ as compared to $n$:
+%more weight on imprecise prior $\MZ$\\ leads to more imprecise posterior $\MN$}
+\item<5-> larger range of $\yzr$ in $\PZc$ \play\ larger range of $\ynr$ in $\PNc$\\ \hspace*{29.25ex}\play\ more vague inferences
+%\note<10>[item]{more imprecise prior $\MZ$ leads to more imprecise $\MN$}
+\end{itemize}
+\uncover<6->{%
+Model very easy to handle:}
+\begin{itemize}%[<+->]
+\item<6-> Hyperparameter set $\PZc$ defines set of priors $\MZ$
+\item<7-> Hyperparameter set $\PNc$ defines set of posteriors $\MN$
+\item<8-> $\PZc \to \PNc$ is easy: $\nng = \nzg + n$, $\ynr = \frac{\nzg}{\nzg + n}\,\yzr + \frac{n}{\nzg + n}\cdot\frac{\tau(\x)}{n}$
+%\item<9-> For quantities linear in posteriors, bounds are attained at ``pure'' posteriors $p(\psib\mid\nng,\ynr)$
+%\then\ optimise over $\PNc$ (not over $\MN$)
+\item<9-> Often, optimising over $(\nng,\ynr) \in \PNc$ is also easy:\\
+\alert{closed form solution} for $\ynr$ = posterior `guess' for $\frac{\tau(\x)}{n}$ (think: $\bar{x}$)\\
+given $\PZc$ has `nice' shape
+\end{itemize}
+\end{frame}
 
 
 \begin{frame}[allowframebreaks]{References}
@@ -572,6 +621,36 @@ data $s/n = 16/16 = 1$
 %  }
 \printbibliography[heading=none]
 \end{frame}
+
+\begin{frame}[label=othermodels-app]{Other models using sets of priors
+\hyperlink{othermodels-back<3>}{\beamerreturnbutton{top}} \hyperlink{othermodels-back<10>}{\beamerreturnbutton{bottom}}}
+\begin{itemize}
+\item Neighbourhood models
+\begin{itemize}
+\item set of distributions `close to' a central distribution $P_0$
+\item common in robust Bayesian approaches 
+\item example: $\varepsilon$-contamination class:
+$\{ P : P = (1-\varepsilon) P_0 + \varepsilon Q, Q \in \mathcal{Q} \}$
+\item not necessarily closed under Bayesian updating
+\end{itemize}
+\item Density ratio class / interval of measures 
+\begin{itemize}
+\item set of distributions by bounds for the density function $f(\vartheta)$:
+\begin{align*}
+\mathcal{M}_{l,u} = \big\{ f(\theta) :
+\exists c \in \posreals: l(\theta) \le c f(\theta) \le u(\theta)\big\}
+\end{align*}
+\item posterior set is bounded by updated $l(\theta)$ and $u(\theta)$
+\item $u(\theta)/l(\theta)$ is constant under updating\\
+\quad\play\ size of the set does not decrease with $n$\\
+\quad\play\ too vague posterior inferences
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+%---- reset total frame number
+\addtocounter{framenumber}{-1} 
 
 \end{document}
 
