@@ -425,10 +425,11 @@ or robust Bayesian approach.
                           \play\ $P(\text{win}) = [1/100,\, 7/100]$}
 \end{block}}
 \uncover<2->{%
-Let parameters $(\nzg, \yzr)$ vary in a set $\PZc$ \play\ set of priors $\MZ$\\[1ex]
+Let hyperparameters $(\nzg, \yzr)$ vary in a set $\PZc$ \play\ set of priors $\MZ$\\[1ex]}
+\uncover<3->{%
 Sets of priors $\to$ sets of posteriors by updating element by element:\\
 GBR \parencite{1991:walley} ensures \emph{coherence} {\small (a consistency property)}\\[1ex]}
-\uncover<3->{%
+\uncover<4->{%
 Set of posteriors $\MN$ via $\PNc = \big\{(\nng,\ynr) \colon (\nzg,\yzr) \in \PZc \big\}$\\
 Bounds for inferences (point estimate, \ldots) by min/max over $\PZc$.
 %\textcite{2009:WalterAugustin}, \textcite{2013:diss-gw}: $\PZc = [\nzlg, \nzug] \times [\yzlr, \yzur]$\\
@@ -585,16 +586,16 @@ Good inference properties \hyperlink{othermodels-app}{\small (cf.\ other models 
 \begin{itemize}%[<+->]
 %\note<10>[item]{In contrast to other models based on sets of priors,\\
 %this model is easy to handle and to elicit,\\ and has very favourable inference properties}
-\item<1-> $n \to \infty$\hspace*{0.9ex}%
+\item<1-> $n \to \infty$\hspace*{1.6ex}%
 %\uncover<2->{\then\ \ $\ynr$ values in $\PNc \to \frac{\tau(\x)}{n}$\hspace*{0.9ex}}%
 %\uncover<3->{\then\ \ `Bayesian consistency'}
-\uncover<2->{\play\ \ $\ynr$ stretch in $\PNc \to 0$\hspace*{0.9ex}}%
-\uncover<3->{\play\ \ precise inferences}
-\note<10>[item]{`Bayesian consistency' just like in usual Bayesian inference}
-\item<4-> larger $\nzg$ \play\ larger $\PNc$ \hspace*{9ex}\play\ more vague inferences
+\uncover<2->{\play\ $\ynr$ stretch in $\PNc \to 0$\hspace*{1.6ex}}%
+\uncover<3->{\play\ precise inferences}
+\item<4-> larger $\nzg$\hspace*{1.6 ex}\play\ larger $\PNc$ \hspace*{8.84ex}\play\ more vague inferences
 %\note<10>[item]{larger $\nzg$ as compared to $n$:
 %more weight on imprecise prior $\MZ$\\ leads to more imprecise posterior $\MN$}
-\item<5-> larger range of $\yzr$ in $\PZc$ \play\ larger range of $\ynr$ in $\PNc$\\ \hspace*{29.25ex}\play\ more vague inferences
+\item<5-> larger range of $\yzr$ in $\PZc$\hspace*{1.6ex}\play\ larger range of $\ynr$ in $\PNc$\\[0.5ex]
+\hspace*{30.02ex}\play\ more vague inferences
 %\note<10>[item]{more imprecise prior $\MZ$ leads to more imprecise $\MN$}
 \end{itemize}
 \uncover<6->{%
@@ -607,10 +608,87 @@ Model very easy to handle:}
 %\then\ optimise over $\PNc$ (not over $\MN$)
 \item<9-> Often, optimising over $(\nng,\ynr) \in \PNc$ is also easy:\\
 \alert{closed form solution} for $\ynr$ = posterior `guess' for $\frac{\tau(\x)}{n}$ (think: $\bar{x}$)\\
-given $\PZc$ has `nice' shape
+when $\PZc$ has `nice' shape
 \end{itemize}
 \end{frame}
 
+\frame{\frametitle{Hyperparameter set shapes}
+%graphs line, rectangle, eggplant
+\vspace*{-4ex}
+\begin{tikzpicture}
+%\uncover<1>{\node {\includegraphics[scale=0.75]{../R/shape0.pdf}};
+%            \draw[-stealth,very thick] (-1,-0.4) -- (2.3,1.1) node [above,midway,sloped] {+ data};}
+\uncover<1>{\node {\includegraphics[scale=0.75]{shape1}};
+            \draw[-stealth,very thick] (-1,-0.4) -- (2.3,1.1) node [above,midway,sloped] {+ data};}
+\uncover<2>{\node {\includegraphics[scale=0.75]{shape2}};
+            \draw[-stealth,very thick] ( 0,-0.5) -- (2.3,1.1) node [above,midway,sloped] {+ data};}
+\uncover<3>{\node {\includegraphics[scale=0.75]{shape3}};
+            \draw[-stealth,very thick] ( 0,-0.5) -- (2.3,1.1) node [above,midway,sloped] {+ data};}
+\end{tikzpicture}
+}
+
+\begin{frame}[label=luck-back]{Hyperparameter set shapes}
+\begin{itemize}%[<+->]
+\item<1-> Set shape is crucial modeling choice:\\ %A range of $\nzg$ values is needed for \pdc\ reaction
+trade-off between model complexity and model behaviour
+% \begin{itemize}
+\item<2-> $\PZc\! = \nzg \times [\yzlr, \yzur]$
+ %{\small (Walley\,1996;\,Quaghebeur\,\&\,de\,Cooman\,2005)}:\\
+ {\footnotesize \parencite{1996:walley::idm,2005:quaeghebeurcooman}:}\\
+ $\PNc\! = \nng \times [\ynlr, \ynur]$ \play\ optimise over $[\ynlr, \ynur]$ only,\\
+ \hspace*{20.9ex}but no prior-data conflict sensitivity
+\item<3-> $\PZc\! = [\nzlg,\nzug] \times [\yzlr, \yzur]$ %{\small (Walley 1991; Walter \& Augustin 2009)}:\\
+ {\footnotesize \parencite{1991:walley,2009:WalterAugustin}:}\\
+ $\PNc$ have non-trivial forms (banana / spotlight), but prior-data conflict sensitivity and closed form for $\min / \max \ynr$ over $\PNc$.\\
+ For other inferences, \textbf{R} package \hyperlink{luck-app}{\texttt{luck}} implements optimisation
+ over $\PNc$ via box-constraint optimisation over $\PZc$
+% \end{itemize}
+\item<4-> Other set shapes possible, but may be more difficult to handle %elicit
+%\item<8-> Prior information may be such that range of $\yzr$ changes with $\nzg$ (or vice versa)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=boat-back]{Hyperparameter set shapes}
+%\hspace*{-2ex}%
+%\uncover<2->{%
+%\vspace*{-7ex}%
+%\begin{center} %trim=l b r t
+\vspace*{2ex}%
+Parameter set shape for strong prior-data agreement {\small \parencite[A.2]{2013:diss-gw}}
+\hyperlink{boat-app}{%
+\begin{tikzpicture}
+%\includegraphics[trim = 40mm 35mm 40mm 45mm, clip, width=\textwidth]{../R/boatshape-durham0913} % width=8, height=6
+\uncover<1>{\node {\includegraphics[trim = 70mm 52.5mm 70mm 65mm, clip, width=\textwidth]{boatshape-defense-1}};} % width=6, height=4.5
+\uncover<2>{\node {\includegraphics[trim = 70mm 52.5mm 70mm 65mm, clip, width=\textwidth]{boatshape-defense-2}};} % width=6, height=4.5
+\end{tikzpicture}
+}%
+%\end{center}%}
+\end{frame}
+
+\begin{frame}[label=luck-back-summary]{Summary}
+\begin{itemize}%[<+->]
+\item<1-> Conjugate priors are a convenient tool for Bayesian inference\\ but there are some pitfalls
+ \begin{itemize}%[<+->]
+ \item Hyperparameters $\nzg,\yzr$ are easy to interpret and elicit
+ \item Averaging property makes calculations simple, but leads to
+ inadequate model behaviour in case of prior-data conflict
+ \end{itemize}
+\item<2-> Sets of conjugate priors maintain advantages \& mitigate issues %find a sweet spot in between
+ \begin{itemize}%[<+->]
+ \item Sets of posteriors adequately reflect vague prior information,\\ the amount of data, and prior-data conflict %uncertainties from
+ \item Hyperparameter set shape is important %a crucial modeling choice
+ \item Reasonable choice: \emph{rectangular} $\PZc = [\nzlg, \nzug] \times [\yzlr, \yzur]$:\\
+ \emph{``generalised iLUCK-models''} {\footnotesize\parencite{2009:WalterAugustin,2013:diss-gw}},\\
+ \textbf{R} package \hyperlink{luck-app}{\texttt{luck}} {\footnotesize\parencite{luck-package}}
+ %(Walter \& Augustin 2009: \emph{generalised iLUCK-models}, \hyperlink{luck-app}{\texttt{luck}})
+ \item Bounds for prior hyperparameters $(\nzg,\yzr)$\\ are easy to interpret and elicit
+ \item Additional imprecison in case of prior-data conflict\\
+ leads to \alert{cautious inferences if, and only if, caution is needed}
+ %\item Shape for more precision in case of strong prior-data agreement is in development
+ %(joint work with Frank Coolen and Mi\c{k} Bickis)
+ \end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}[allowframebreaks]{References}
 %\begin{frame}[allowframebreaks]{References}
@@ -621,6 +699,10 @@ given $\PZc$ has `nice' shape
 %  }
 \printbibliography[heading=none]
 \end{frame}
+
+
+%---- bonus material
+
 
 \begin{frame}[label=othermodels-app]{Other models using sets of priors
 \hyperlink{othermodels-back<3>}{\beamerreturnbutton{top}} \hyperlink{othermodels-back<10>}{\beamerreturnbutton{bottom}}}
@@ -648,9 +730,89 @@ $\{ P : P = (1-\varepsilon) P_0 + \varepsilon Q, Q \in \mathcal{Q} \}$
 \end{itemize}
 \end{frame}
 
+\begin{frame}[label=luck-app]{\textbf{R} package \texttt{luck} %
+\hyperlink{luck-back<4>}{\beamerreturnbutton{set shapes}} %
+\hyperlink{luck-back-summary<2>}{\beamerreturnbutton{summary}}}
+\begin{itemize}
+\item \texttt{S4} implementation of the general canonical prior parameter structure
+with rectangular sets $\PZc = [\nzlg, \nzug] \times [\yzlr, \yzur]$
+\item lean subclasses for concrete sample distributions\\
+(currently implemented: scaled normal, exponential)
+\item available on R-Forge:\\[1.5ex]
+{\footnotesize \url{install.packages("luck", repos="http://R-Forge.R-project.org")}\\[1.2ex]
+or\\[1.2ex]
+\url{install.packages("http://download.r-forge.r-project.org/src/contrib/luck_0.9.tar.gz", repos = NULL, type = "source")}}
+%{\small (issue: \texttt{S4} classes and \texttt{S3}-style documentation seem to be incompatible)} 
+\end{itemize}
+\end{frame}
+\addtocounter{framenumber}{-1} 
+
+\begin{frame}{\textbf{R} package \texttt{luck} \hyperlink{luck-back<4>}{\beamerreturnbutton{}}}
+\vspace*{-5ex}
+\hspace*{10ex}
+\begin{tikzpicture}[class/.style={draw, rectangle split, rectangle split parts=3, %
+                                  every text node part/.style={text centered}, %
+                                  font=\ttfamily, %
+                                  fill=gray!30, text width=45mm, thick}, %
+                    point/.style={coordinate},
+                    transform canvas={scale=0.8}]%every node/.style=draw]
+\node [class] (luck) at (0,0) {LuckModel \nodepart{second} \gruen{n0}: matrix \\
+                                         \rot{y0}: matrix \\
+                                         data: LuckModelData
+                                         \nodepart{third}
+                                         show() \\
+                                         plot() \\
+                                         unionHdi() \\
+                                         \quad \vdots};
+\node [coordinate, below=0.4cm of luck] (p0) {};
+\node [coordinate, left=0.4cm of p0] (p1) {};
+\node [class, text width = 47mm] (scalednormal) [below=0.4cm of p1] {ScaledNormalLuckModel\phantom{p} %
+                                                                        \nodepart{second} \phantom{pS}
+                                                                        \nodepart{third} singleHdi()\phantom{p}\\};
+\draw [stealth'-, thick] (luck.south) -- (p0) -- (p1) -- (scalednormal.north); %node [midway,right,draw=none] {inherits};
+\node[class, text width=45mm] (poisson) [right=0.5cm of scalednormal] {ExponentialLuckModel %
+                                                                        \nodepart{second} \phantom{pS}
+                                                                        \nodepart{third} singleHdi()\phantom{p}\\};
+\node[class, text width=35mm, double copy shadow={shadow xshift=1mm,shadow yshift=-1mm}] %
+ (more) [right=0.5cm of poisson] {\phantom{pS}\ldots\phantom{pS} \nodepart{second} \phantom{pS}
+                                                                 \nodepart{third} singleHdi()\phantom{pS}\\};
+\node [coordinate, above=0.4cm of poisson] (p2) {};
+\draw [thick] (p0) -- (p2) -- (poisson.north);
+\node [coordinate, above=0.4cm of more] (p3) {};
+\draw [thick] (p2) -- (p3) -- (more.north);
+%\draw[->] (0,0) -- (1,0);
+\begin{scope}[transform canvas={scale=0.75}]
+%\draw[->] (0,0.5) -- (1,0.5);
+%\node [coordinate] (lmd) [right=0.5cm of luck] {}; 
+\node [class] (data) at (6.8,1.5) {LuckModelData \nodepart{second} tauN: matrix\\ rawData: matrix
+                                                             \nodepart{third} show()};
+\node [coordinate, below=0.4cm of data] (dp0) {};
+\node [coordinate, left=0.4cm of dp0] (dp1) {};
+\node[class, text width=37mm] (scalednormaldata) [below=0.4cm of dp1] {ScaledNormalData\phantom{p} \nodepart{second} \phantom{h}
+                                                                                                   \nodepart{third} show()};
+\node[class, text width=37mm] (poissondata) [right=0.5cm of scalednormaldata] {ExponentialData \nodepart{second} \phantom{h}
+                                                                                               \nodepart{third} show()};
+\node[class, text width=30mm, double copy shadow={shadow xshift=1mm,shadow yshift=-1mm}] %
+ (moredata) [right=0.5cm of poissondata] {\phantom{pD}\ldots\phantom{pD} \nodepart{second} \phantom{h}
+                                                                         \nodepart{third}  show()};
+\draw [stealth'-, thick] (data.south) -- (dp0) -- (dp1) -- (scalednormaldata.north); %node [midway,right,draw=none] {inherits};
+\node [coordinate, above=0.4cm of poissondata] (dp2) {};
+\draw [thick] (dp0) -- (dp2) -- (poissondata.north);
+\node [coordinate, above=0.4cm of moredata] (dp3) {};
+\draw [thick] (dp2) -- (dp3) -- (moredata.north);
+\end{scope}
+\node [coordinate] (snake) at (2.75,1.025) {};
+\draw [dashed, very thick, -stealth'] (2.5,0.35) .. controls +(right:4mm) and +(up:4mm)
+                                      .. (snake) .. controls +(up:4mm) and +(left:8mm) .. (3.2,1.7);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[label=boat-app]{Strong Prior-Data Agreement Modelling \hyperlink{boat-back<2>}{\beamerreturnbutton{}}}
+\includegraphics[trim = 15mm 45mm 25mm 60mm, clip, width=\textwidth]{boatshape-prior}
+\end{frame}
 
 %---- reset total frame number
-\addtocounter{framenumber}{-1} 
+\addtocounter{framenumber}{-3} 
 
 \end{document}
 
