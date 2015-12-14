@@ -182,6 +182,7 @@ rectangle,rounded corners=0mm,draw,fill=tuepmsgreen!70,thick,inner sep=0pt,minim
 
 \frame{
 \frametitle{Bayesian Inference}
+\vspace*{-2ex}
 \begin{align*}
 \begin{array}{ccccl}
 \uncover<1->{\text{expert info}        & + & \text{data}                & \to & \text{complete picture} \\[1.5ex]}
@@ -194,11 +195,22 @@ rectangle,rounded corners=0mm,draw,fill=tuepmsgreen!70,thick,inner sep=0pt,minim
 \uncover<4->{p \sim \be(\az,\bz)} & & \uncover<3->{s \mid p \sim \bin(n,p)} & & \uncover<5->{p \mid s \sim \be(\an,\bn)}
 \end{array}
 \end{align*}
-\uncover<6->{\begin{itemize}
+\vspace*{-3ex}
+\begin{tikzpicture}
+\uncover<6->{%
+\node at (0,0) {\parbox{0.99\textwidth}{%
+\begin{itemize}
 \item conjugate prior makes learning about parameter tractable,\\  %posterior distribution
       just update hyperparameters:\quad $\az \to \an$, $\bz \to \bn$
 \item closed form for some inferences: $\E[p] = \frac{\an}{\an+\bn}$
-\end{itemize}}
+\end{itemize}}};}
+\uncover<3-5>{%
+\node at (-0.5,0) {\includegraphics[width=0.25\textwidth]{../course/smallfig-binom}};}
+\uncover<4-5>{%
+\node at (-4.5,0) {\includegraphics[width=0.25\textwidth]{../course/smallfig-prior}};}
+\uncover<5>{%
+\node at ( 3.5,0) {\includegraphics[width=0.25\textwidth]{../course/smallfig-posterior}};}
+\end{tikzpicture}
 }
 
 \frame{
