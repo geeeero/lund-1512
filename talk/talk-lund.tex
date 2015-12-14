@@ -202,7 +202,7 @@ rectangle,rounded corners=0mm,draw,fill=tuepmsgreen!70,thick,inner sep=0pt,minim
 \begin{itemize}
 \item conjugate prior makes learning about parameter tractable,\\  %posterior distribution
       just update hyperparameters:\quad $\az \to \an$, $\bz \to \bn$
-\item closed form for some inferences: $\E[p] = \frac{\an}{\an+\bn}$
+\item closed form for some inferences: $\E[p\mid s] = \frac{\an}{\an+\bn}$
 \end{itemize}}};}
 \uncover<3-5>{%
 \node at (-0.5,0) {\includegraphics[width=0.25\textwidth]{../course/smallfig-binom}};}
@@ -236,7 +236,7 @@ in the sampling model for which the observed data is surprising''\\
 %Example Beta-Binom, show point, line, rectangle
 \begin{itemize}[<+->]
 \item Bernoulli observations: 0/1 observations (failure/success)
-\item given: a set of $n$ observations and strong prior information
+\item given: a set of $n$ i.i.d.\ observations and strong prior information
 \item we are, e.g., interested in probability for success in next trial
 \end{itemize}
 \uncover<4->{
@@ -295,7 +295,7 @@ where $s$ = number of successes in the $n$ observed trials}
 \uncover<6->{%
 \node[redbox] at (0,-2.8) {$\E[p \mid s] = \ynr$ is a weighted average of $\E[p]$ and $\hat{p}$!};}
 \uncover<7->{%
-\node[redbox] at (0,-4.0) {$\V[p \mid s] = \dfrac{\ynr (1-\ynr)}{\nng + 1}$ decreases for any $s$!};}
+\node[redbox] at (0,-4.0) {$\V[p \mid s] = \dfrac{\ynr (1-\ynr)}{\nng + 1}$ decreases with $n$!};}
 \end{tikzpicture}
 }
 
@@ -412,7 +412,7 @@ $\int_a^b f(p) \dd p = P(a \le p \le b)$\\[1.5ex]
 \item[\play] \textbf{Add \alert{imprecision} as new modelling dimension:\\
 \alert{Sets of priors} model uncertainty in probability statements\\
 and allow to better model partial or vague information on $p$.}
-\item Separate uncertainty \emph{whithin the model} (probability statements)\\
+\item Separate uncertainty \emph{within the model} (probability statements)\\
 from uncertainty \emph{about the model} (how certain about statements) %(which parameters).
 \item Can also be seen as systematic sensitivity analysis\\
 or robust Bayesian approach.
@@ -575,7 +575,8 @@ data $s/n = 16/16 = 1$
 }
 
 \begin{frame}{Sets of Nonparametric Survival Functions}
-\includegraphics[width=\textwidth]{3comp-latefailures}
+\includegraphics[width=\textwidth]{3comp-latefailures}\\
+{\small \qquad(joint work with Louis Aslett and Frank Coolen)}
 \end{frame}
 
 \frame{\frametitle{Example: Scaled Normal Data}
