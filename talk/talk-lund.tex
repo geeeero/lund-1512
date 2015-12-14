@@ -253,7 +253,7 @@ where $s$ = number of successes in the $n$ observed trials}
 }
 
 \frame{
-\frametitle{Reparametrisation of the Beta distribution}
+\frametitle{Reparametrisation of the Beta Distribution}
 \uncover<1->{\play\ reparametrisation helps to understand effect of prior-data conflict:\\}
 \begin{tikzpicture}
 [pfeil/.style={-latex', line width=1mm, color=tuered, shorten <=1mm},
@@ -357,7 +357,7 @@ $\nng \in [20, 24]$, $\ynr \in [0.73, 0.86]$
 \end{columns}
 }
 
-\frame{\frametitle{Canonical conjugate priors}
+\frame{\frametitle{Canonical Conjugate Priors}
 
 \uncover<1->{%
 Averaging property holds \alert{\emph{for all conjugate models}} (!)
@@ -397,7 +397,7 @@ f(\psib\mid\nzg,\yzr,\vec{x})
 }
 
 \frame{
-\frametitle{Imprecise / interval probability}
+\frametitle{Imprecise / Interval Probability}
 \begin{itemize}[<+->]
 \item Averaging property holds \alert{\emph{for all conjugate models}} (!)\\
 \cyanalert{Can we mitigate this and still keep tractability?}
@@ -420,7 +420,7 @@ or robust Bayesian approach.
 }
 
 \frame{
-\frametitle{Sets of prior distributions}
+\frametitle{Sets of Prior Distributions}
 \uncover<1->{%
 \begin{block}{Uncertainty about probability statements}
 \centerline{smaller sets $=$ more precise probability statements}
@@ -574,7 +574,11 @@ data $s/n = 16/16 = 1$
 \end{columns}
 }
 
-\frame{\frametitle{Example: scaled normal data}
+\begin{frame}{Sets of Nonparametric Survival Functions}
+\includegraphics[width=\textwidth]{3comp-latefailures}
+\end{frame}
+
+\frame{\frametitle{Example: Scaled Normal Data}
 \begin{tikzpicture}
 \uncover<1>{%
 \node (0,0) {\begin{minipage}{0.99\textwidth}%
@@ -592,7 +596,7 @@ posterior:       & $\mu\mid\nng,\ynr$ & $\sim$ & $\norm(\ynr, 1/\nng)$ \quad ($\
 \end{tikzpicture}
 }
 
-\begin{frame}[label=othermodels-back]{General model properties}
+\begin{frame}[label=othermodels-back]{General Model Properties}
 \uncover<1->{%
 Good inference properties \hyperlink{othermodels-app}{\small (cf.\ other models based on sets of priors)}}
 \begin{itemize}%[<+->]
@@ -624,7 +628,7 @@ when $\PZc$ has `nice' shape
 \end{itemize}
 \end{frame}
 
-\frame{\frametitle{Hyperparameter set shapes}
+\frame{\frametitle{Hyperparameter Set Shapes}
 %graphs line, rectangle, eggplant
 \vspace*{-4ex}
 \begin{tikzpicture}
@@ -639,7 +643,7 @@ when $\PZc$ has `nice' shape
 \end{tikzpicture}
 }
 
-\begin{frame}[label=luck-back]{Hyperparameter set shapes}
+\begin{frame}[label=luck-back]{Hyperparameter Set Shapes}
 \begin{itemize}%[<+->]
 \item<1-> Set shape is crucial modeling choice:\\ %A range of $\nzg$ values is needed for \pdc\ reaction
 trade-off between model complexity and model behaviour
@@ -660,7 +664,7 @@ trade-off between model complexity and model behaviour
 \end{itemize}
 \end{frame}
 
-\begin{frame}[label=boat-back]{Hyperparameter set shapes}
+\begin{frame}[label=boat-back]{Hyperparameter Set Shapes}
 %\hspace*{-2ex}%
 %\uncover<2->{%
 %\vspace*{-7ex}%
