@@ -71,6 +71,28 @@
 # with sets of conjugate priors for dealing with prior-data conflict #
 ######################################################################
 @
+\subsection*{Exercise 1}
+
+\begin{align}
+f(p \mid s) &\propto f(s \mid p) f(p) \\
+ &\propto p^s (1-p)^{n-s} p^{\az-1}\, (1-p)^{\bz-1} \\
+ &= p^{\alpha+s-1}\, (1-p)^{\beta+n-s-1}
+\end{align}
+which has the form of the Beta distribution Eq.~(3) -- remember that $B(\alpha,\beta)$ is just
+a normalisation constant -- with the parameters $\an = \az + s$ and $\bn = \bz + n - s$.
+
+\subsection*{Exercise 2}
+
+From (5), we get $\az = \nz\yz$ and $\bz = \nz - \nz\yz$. Inserting into (4) on both sides for each equation
+(for ${}\uz$ and ${}\un$ versions of $\alpha$ and $\beta$), we get
+\begin{align}
+\nn\yn &= \nz\yz + s \\
+\nn - \nn\yn &= \nz - \nz\yz + n - s\,.
+\end{align}
+Inserting the first into the second equation and solving for $\nn$, we get $\nn = \nz + n$.
+Dividing the first equation by $\nn = \nz + n$, we get $\yn = \frac{\nz\yz + s}{\nz + n}$.
+
+\newpage
 \subsection*{Exercise 3}
 
 <<fig.width=10, fig.height=4>>=
@@ -96,6 +118,36 @@ p2 <- qplot(xvec, dbetany(x=xvec, n=10, y=0.3), geom="line",
             xlab="p", ylab="f(p)", main="n=10, y=0.3", ylim=c(0,3))
 grid.arrange(p1, p2, nrow=1, ncol=2, widths=c(1,1))
 @
+
+\subsection*{Exercise 4}
+
+\begin{enumerate}[(i)]
+\item $\nz \to 0$:\\
+ $\yn \to \frac{s}{n}$, the ML estimate;\\
+ $\V(p\mid s) \to \frac{\frac{s}{n}(1-\frac{s}{n})}{n+1}$ so increases disregarding the enumerator.\\
+ An informative prior will decrease posterior varaiance!
+\item $\nz \to \infty$:\\
+ $\yn \to \yz$, data is ignored with infinitely strong prior;\\
+ $\V(p\mid s) \to 0$, the posterior contracts on $\yz$.
+\item $n\to \infty$ when $s/n = \text{const}$:\\
+ $\yn \to \frac{s}{n}$, the ML estimate;\\
+ $\V(p\mid s) \to 0$, the posterior contracts on $\frac{s}{n}$.
+\end{enumerate}
+
+\subsection*{Exercise 5}
+
+\begin{align}
+f(\theta \mid \vec{x}) &\propto f(\vec{x} \mid \theta) f(\theta) \\
+ &\propto \exp\big\{ \psi \cdot \tau(\vec{x}) - n \mbf{b}(\psi)\big\}\,
+          \exp\Big\{ \nz \Big[ \yz \cdot \psi - \mbf{b}(\psi) \Big] \Big\} \\
+ &= \exp\Big\{ \big(\nz\yz + \tau(\vec{x})\big) \psi - (\nz + n) \mbf{b}(\psi) \Big\} \\
+ &= \exp\Big\{ (\nz + n) \Big[ \frac{\nz\yz + \tau(\vec{x})}{\nz + n} \,\psi - \mbf{b} \Big] \Big\} \\
+ &= \exp\Big\{ \nn \Big[ \yn \cdot \psi - \mbf{b}(\psi) \Big] \Big\}\,.
+\end{align}
+
+\subsection*{Exercise 6}
+
+(individual)
 
 \subsection*{Exercise 7}
 
@@ -176,6 +228,26 @@ plot(luck2, xlim=c(11,17),
                          borderCol="blue", rectangle=TRUE))
 @
 
+\subsection*{Exercise 9}
+
+$\tau(\vec{x})$ does not appear in (23);
+for any sample of size $n$, the prior imprecision decreases by the factor $\frac{\nz}{\nz + n}$!
+
+\subsection*{Exercise 10}
+
+The cases $\ttaux < \yzl$ and $\ttaux > \yzu$ correspond to prior-data conflict;
+in both cases $\nzl$ is used to calculated the extreme value of $\yn$ closer to $\ttaux$,
+while $\nzu$ is used to calculated the other extreme of $\yn$.
+The `banana shape' shows this as well,
+one extreme is found at the left side corners of $\PN$,
+the other on the right side corners of $\PN$.
+
+\subsection*{Exercise 11}
+
+When $\ttaux \in [\yzl, \yzu]$,
+then both $\ynl$ and $\ynu$ are calculated with $\nzu$;
+both extremes are found on the right side corners of $\PN$.
+
 \subsection*{Exercise 12}
 
 <<fig.width=6, fig.height=6, out.width='0.4\\linewidth'>>=
@@ -243,5 +315,9 @@ cdfplot(luck4, control=controlList(posterior=TRUE),
         main="Set of posterior cdfs", xlim=c(1,6))
 lines(unionHdi(luck4, posterior=TRUE)$borders, rep(-0.02,2), lwd=3, lend=2)
 @
+
+\subsection*{Exercise 14}
+
+(individual)
 
 \end{document}
